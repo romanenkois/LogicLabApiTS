@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { errorHadler } from '@utils';
+import { CourseService } from '@services';
 
 export const getCourse = async (req: Request, res: Response) => {
   try {
@@ -10,20 +11,15 @@ export const getCourse = async (req: Request, res: Response) => {
       return;
     }
 
-    let course_data;
+    const course = await CourseService.getCourse(courseName);
 
-    switch (courseName) {
-      case 'javascript':
-        course_data = {};
-        break;
-      default:
-        res
-          .status(404)
-          .json({ error: 'Course with that name hasnt been found' });
-        break;
+    if (course) {
+      res.status(200).json({course: course});
+    } else {
+      res.status(404).json({error: 'Course not found' });
     }
 
-    res.status(200).json(course_data);
+
   } catch (error) {
     errorHadler(res, error);
   }

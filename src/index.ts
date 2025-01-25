@@ -21,7 +21,7 @@ const PORT = appConfig.server.port;
 
 app.listen(PORT, () => {
   if (appConfig.logging.console.onServerStart) {
-    console.log('logicLabApiTS is running');
+    console.log('logicLabApiTS is running on port ', PORT);
   }
   if (appConfig.logging.telegram.onServerStart) {
     sendTelegramMessage('logicLabApiTS is running');

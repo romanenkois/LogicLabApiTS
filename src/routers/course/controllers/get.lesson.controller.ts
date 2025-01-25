@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { errorHadler } from '@utils';
+import { CourseService } from '@services';
 
 export const getLesson = async (req: Request, res: Response) => {
   try {
@@ -9,23 +10,17 @@ export const getLesson = async (req: Request, res: Response) => {
     if (!courseName) {
       res.status(400).json({ message: 'Course name is required' });
     }
-
-    let lesson_data;
-
-    switch (courseName) {
-      case 'javascript':
-        lesson_data = {};
-        break;
-      default:
-        res.status(404).json({ message: 'Course with that name hasnt been found' });
-        return;
+    if (!lessonName) {
+      res.status(400).json({ message: 'Lesson name is required' });
     }
 
-    if (!lesson_data) {
-      res.status(404).json({ message: 'Lesson with that name hasnt been found' });
-    }
+    const lesson = await CourseService.getLesson(courseName, lessonName);
 
-    res.status(200).json({ lesson: lesson_data });
+    if (lesson) {
+      res.status(200).json({ lesson: lesson });
+    } else {
+      res.status(404).json({ error: 'Lesson not found' });
+    }
   } catch (error) {
     errorHadler(res, error);
   }

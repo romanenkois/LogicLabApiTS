@@ -2,8 +2,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const appConfig = {
+  app: {
+    deployment: process.env.NODE_ENV ? process.env.NODE_ENV === 'production' : true, // it ensures that app is production by default
+  },
   server: {
-    localHost: process.env.LOCAL_HOST || false,
+    localHost: process.env.LOCAL_HOST || false, // defermins, if host value is used
     port: process.env.PORT || 3000,
     host: process.env.HOST || '0.0.0.0',
   },
@@ -47,6 +50,6 @@ export const appConfig = {
 };
 
 // Needed to fix issue of assigning values to basic page before config is innitialized
-// this.config.other.basic_page_response = config.other.basic_page_response
-//     .replace('__API_DOC_LINK__', config.other.api_documentation_link)
-//     .replace('__LOGIC_LAB_LINK__', config.other.logicLab_link);
+appConfig.other.basic_page_response = appConfig.other.basic_page_response
+  .replace('__API_DOC_LINK__', appConfig.other.apiDocumentationLink)
+  .replace('__LOGIC_LAB_LINK__', appConfig.other.logicLab_link);
