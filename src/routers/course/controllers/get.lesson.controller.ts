@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { errorHadler } from '@utils';
+import { errorHandler } from '@utils';
 import { CourseService } from '@services';
 
 export const getLesson = async (req: Request, res: Response) => {
@@ -22,6 +22,6 @@ export const getLesson = async (req: Request, res: Response) => {
       res.status(404).json({ error: 'Lesson not found' });
     }
   } catch (error) {
-    errorHadler(res, error);
+    errorHandler(res, error);
   }
 };

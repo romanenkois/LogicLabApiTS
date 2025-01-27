@@ -38,8 +38,9 @@ interface LessonBlock {
 }
 
 interface PlainTextBlock extends LessonBlock {
-  type: 'plainText';
+  type: 'plain-text';
   object: {
+    title?: string;
     text: string;
   }
 }
@@ -53,7 +54,7 @@ interface ListBlock extends LessonBlock {
 }
 
 interface CodeSampleBlock extends LessonBlock {
-  type: 'codeSample';
+  type: 'code-sample';
   object: {
     title?: string;
     programmingLanguage?: ProgramingLanguage;

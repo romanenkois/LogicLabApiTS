@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { errorHadler } from '@utils';
+import { errorHandler } from '@utils';
 import { CourseService } from '@services';
 
 export const getCourse = async (req: Request, res: Response) => {
@@ -21,6 +21,6 @@ export const getCourse = async (req: Request, res: Response) => {
 
 
   } catch (error) {
-    errorHadler(res, error);
+    errorHandler(res, error);
   }
 };
