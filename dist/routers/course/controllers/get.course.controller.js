@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCourse = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
+const _services_1 = require("../../../services/index.js");
 const getCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const courseName = req.params['courseHref'];
@@ -18,21 +19,16 @@ const getCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(400).json({ message: 'Course name is required' });
             return;
         }
-        let course_data;
-        switch (courseName) {
-            case 'javascript':
-                course_data = {};
-                break;
-            default:
-                res
-                    .status(404)
-                    .json({ error: 'Course with that name hasnt been found' });
-                break;
+        const course = yield _services_1.CourseService.getCourse(courseName);
+        if (course) {
+            res.status(200).json({ course: course });
         }
-        res.status(200).json(course_data);
+        else {
+            res.status(404).json({ error: 'Course not found' });
+        }
     }
     catch (error) {
-        (0, _utils_1.errorHadler)(res, error);
+        (0, _utils_1.errorHandler)(res, error);
     }
 });
 exports.getCourse = getCourse;

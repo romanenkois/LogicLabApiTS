@@ -11,13 +11,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getListOfCourses = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
+const _services_1 = require("../../../services/index.js");
 const getListOfCourses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const courses = {};
+        _services_1.CourseService.getCoursesList();
         res.status(200).json(courses);
     }
     catch (error) {
-        (0, _utils_1.errorHadler)(res, error);
+        (0, _utils_1.errorHandler)(res, error);
     }
 });
 exports.getListOfCourses = getListOfCourses;

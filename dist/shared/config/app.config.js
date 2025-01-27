@@ -1,9 +1,11 @@
 "use strict";
-// import dotenv from 'dotenv';
-// dotenv.config();
-// dotenv can be depricated to --env-file=.env
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.appConfig = void 0;
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 exports.appConfig = {
     app: {
         deployment: process.env.NODE_ENV ? process.env.NODE_ENV === 'production' : true, // it ensures that app is production by default
