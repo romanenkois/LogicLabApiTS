@@ -13,14 +13,21 @@ export const appConfig = {
   logging: {
     console: {
       onServerStart: true,
+      onDataBaseConnect: true,
       onRequset: true,
     },
     file: {
       onRequset: false,
     },
     telegram: {
-      onServerStart: false,
+      onServerStart: true,
     },
+  },
+  database: {
+    mongo: {
+      connectionUri: process.env.MONGODB_CONNECTION_URI,
+      dbName: process.env.MONGODB_DATABASE_NAME,
+    }
   },
   telegram: {
     botId: process.env.TELEGRAM_BOT_ID,
@@ -43,9 +50,7 @@ export const appConfig = {
       </html>`,
   },
   featureFlags: {
-    telegram: {
-      sendMessageOnStart: true,
-    },
+
   },
 };
 
