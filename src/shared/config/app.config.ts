@@ -30,7 +30,7 @@ export const appConfig = {
     // link to router documentation
     apiDocumentationLink: 'https://github.com/romanenkois/logicLab',
     // link to itself hosted url
-    logicLab_link: '#',
+    logicLab_link: 'https://logic-lab-two.vercel.app/home',
     // responce to GET '/'
     basic_page_response: `
       <DOCTYPE html>

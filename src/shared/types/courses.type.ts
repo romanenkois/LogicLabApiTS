@@ -1,13 +1,13 @@
-export type ProgramingLanguage = string;
+import { ProgramingLanguage } from '@types';
 
-export type CoursesList = Array<{
+export type CoursesList = {
   id: string;
   href: string;
   name: string;
   programingLanguage: ProgramingLanguage;
-}>
+}[]
 
-export type Course = {
+export interface Course {
   id: string;
   href: string;
   name: string; // short name, like to be used in cramped lists
@@ -17,7 +17,7 @@ export type Course = {
   lessons: Array<Lesson>;
 }
 
-export type Lesson = {
+export interface Lesson {
   id: string;
   href: string;
   courseHref: string;

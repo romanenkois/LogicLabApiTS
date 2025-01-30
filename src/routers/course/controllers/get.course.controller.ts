@@ -4,7 +4,7 @@ import { CourseService } from '@services';
 
 export const getCourse = async (req: Request, res: Response) => {
   try {
-    const courseName = req.params['courseHref'];
+    const courseName = req.query['course'] as string;
 
     if (!courseName) {
       res.status(400).json({ message: 'Course name is required' });

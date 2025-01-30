@@ -6,30 +6,30 @@ import { getLesson } from './controllers/get.lesson.controller';
 
 export const coursesRouter = Router();
 
-coursesRouter.get('/all-courses-list',
+coursesRouter.get('/courses-list',
   (req, res, next) => {
     if (appConfig.logging.console.onRequset) {
-      console.log('GET /v2/courses/all-courses-list');
+      console.log('GET /v2/courses/courses-list');
     }
     next();
   },
   getListOfCourses
 );
 
-coursesRouter.get('/:courseHref',
+coursesRouter.get('/course',
   (req, res, next) => {
     if (appConfig.logging.console.onRequset) {
-      console.log('GET /v2/courses/:courseHref');
+      console.log('GET /v2/course');
     }
     next();
   },
   getCourse
 );
 
-coursesRouter.get('/:courseHref/:lessonHref',
+coursesRouter.get('/lesson',
   (req, res, next) => {
     if (appConfig.logging.console.onRequset) {
-      console.log('GET /v2/courses/:courseHref/:lessonHref');
+      console.log('GET /v2/lesson');
     }
     next();
   },

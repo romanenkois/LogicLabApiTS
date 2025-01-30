@@ -1,10 +1,15 @@
 import express, { Request, Response, Router } from "express";
+import cors from "cors";
 
 import { appConfig } from '@config';
 import { coursesRouter } from "@routers";
 import { sendTelegramMessage } from "@utils";
 
 const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const v2Router = Router();  // the router of whole app,
                             // this this v2, couse it is a second version
                             // previos v1 was made by javascript
