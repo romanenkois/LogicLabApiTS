@@ -1,7 +1,7 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import { appConfig } from '@config';
 
-export abstract class MongoDB {
+export class MongoDB {
   private static readonly connectionUri = appConfig.database.mongo.connectionUri;
   private static readonly dbName = appConfig.database.mongo.dbName;
   private static readonly client = new MongoClient(this.connectionUri || '', {
@@ -25,26 +25,14 @@ export abstract class MongoDB {
       }
     } catch (error) {
       console.error('MongoDB connection error:', error);
-    } finally {
-      await this.client.close();
     }
   }
 
   public static getDB() {
     if (!this.dbConnected) {
-      throw new Error('MongoDB is not connected');
+      console.error('MongoDB is not connected');
     } else {
       return this.$database;
     }
   }
-
-  // doesn't work
-  // constructor() {
-  //   if (!MongoDB.connectionUri || MongoDB.connectionUri === '') {
-  //     throw new Error('MongoDB connection URI is not provided');
-  //   }
-  //   if (!MongoDB.dbName || MongoDB.dbName === '') {
-  //     throw new Error('MongoDB database name is not provided');
-  //   }
-  // }
 }
