@@ -1,12 +1,11 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+export const appDeployment: 'development' | 'production' = (process.env.APP_DEPLOYMENT as 'development' | 'production') || 'production';
+
 export const appConfig = {
-  app: {
-    deployment: process.env.NODE_ENV ? process.env.NODE_ENV === 'production' : true, // it ensures that app is production by default
-  },
   server: {
-    localHost: process.env.LOCAL_HOST || false, // defermins, if host value is used
+    localHost: process.env.LOCAL_HOST || false, // determines, if host value is used
     port: process.env.PORT || 3000,
     host: process.env.HOST || '0.0.0.0',
   },
@@ -20,7 +19,7 @@ export const appConfig = {
       onRequset: false,
     },
     telegram: {
-      onServerStart: true,
+      onServerStart: appDeployment === 'production' ? true : false,
     },
   },
   database: {

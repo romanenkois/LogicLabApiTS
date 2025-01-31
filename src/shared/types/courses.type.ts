@@ -1,12 +1,5 @@
 import { ProgramingLanguage } from '@types';
 
-export type CoursesList = {
-  id: string;
-  href: string;
-  name: string;
-  programingLanguage: ProgramingLanguage;
-}[]
-
 export interface Course {
   id: string;
   href: string;
@@ -14,17 +7,48 @@ export interface Course {
   title: string; // long name, used in full page
   programingLanguage: ProgramingLanguage;
   description: string;
-  lessons: Array<Lesson>;
+  lessons: Lesson[];
 }
 
+export interface CourseBasic {
+  id: string;
+  href: string;
+  name: string;
+  title: string;
+  programingLanguage: ProgramingLanguage;
+  description: string;
+}
+
+export interface CourseDTO {
+  id: string;
+  href: string;
+  name: string;
+  title: string;
+  programingLanguage: ProgramingLanguage;
+  description: string;
+  lessons: LessonSimple[];
+}
 export interface Lesson {
   id: string;
   href: string;
   courseHref: string;
+  category?: string;
+  position: number;
   name: string;
   title: string;
   description: string;
   content?: Array<LessonContent>;
+}
+
+export interface LessonSimple {
+  id: string;
+  href: string;
+  courseHref: string;
+  category?: string;
+  position: number;
+  name: string;
+  title: string;
+  description: string;
 }
 
 export type LessonContent =
