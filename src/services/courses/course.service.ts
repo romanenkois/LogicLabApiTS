@@ -1,13 +1,15 @@
 import { MongoDB } from '@database';
-import { mapToDtoCourse, mapToBasicCourse, mapToSimpleLesson } from '@mappers';
-import { Course, CourseDTO, CourseBasic, Lesson } from '@types';
+import { mapToSimpleLesson } from '@mappers';
+import { CourseBasic, Lesson, LessonSimple } from '@types';
+import { getCourse } from 'src/routers/course/controllers/get.course.controller';
 
 export class CourseService {
   public static async getCoursesList(): Promise<CourseBasic[]> {
     const courses: CourseBasic[] = [];
     const collectionName = 'courses';
+    const db = await MongoDB.getDB();
 
-    const responce = await MongoDB.getDB()
+    const responce = await db
       .collection(collectionName)
       .find()
       .toArray();
@@ -17,36 +19,47 @@ export class CourseService {
     }
 
     for (const course of responce) {
-      courses.push(mapToBasicCourse(course as Course));
+      courses.push(course as CourseBasic);
     }
 
     return courses;
   }
 
-  public static async getCourse(courseHref: string): Promise<CourseDTO | null> {
-    let course: CourseDTO | null = null;
+  public static async getCourse(courseHref: string): Promise<CourseBasic | null> {
+    let course: CourseBasic | null = null;
     const collectionName = 'courses';
+    const db = await MongoDB.getDB();
 
-    const courseResponce = await MongoDB.getDB()
+    const courseResponce = await db
       .collection(collectionName)
       .findOne({ href: courseHref });
 
-    const lessonsResponce = await MongoDB.getDB()
-      .collection(`${courseHref}-lessons`)
-      .find()
-      .toArray();
-
     if (courseResponce) {
-      course = mapToDtoCourse(courseResponce as Course);
-
-      if (lessonsResponce && lessonsResponce.length > 0) {
-        for (const lesson of lessonsResponce) {
-          course.lessons.push(mapToSimpleLesson(lesson));
-        }
-      }
+      course = courseResponce as CourseBasic;
     }
 
     return course;
+  }
+
+  public static async getCourseLessons(courseHref: string): Promise<LessonSimple[]> {
+    const lessons: LessonSimple[] = [];
+    const collectionName = `${courseHref}-lessons`;
+    const db = await MongoDB.getDB();
+
+    const responce = await db
+      .collection(collectionName)
+      .find()
+      .toArray();
+
+    if (!responce) {
+      return [];
+    }
+
+    for (const lesson of responce) {
+      lessons.push(mapToSimpleLesson(lesson as Lesson));
+    }
+
+    return lessons;
   }
 
   public static async getLesson(
@@ -54,8 +67,9 @@ export class CourseService {
     lessonHref: string
   ): Promise<Lesson | null> {
     const collectionName = `${courseHref}-lessons`;
+    const db = await MongoDB.getDB();
 
-    const responce = await MongoDB.getDB()
+    const responce = await db
       .collection(collectionName)
       .findOne({ href: lessonHref });
 

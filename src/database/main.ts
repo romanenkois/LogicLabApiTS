@@ -12,7 +12,7 @@ export class MongoDB {
     },
   });
   private static dbConnected = false;
-  private static $database: any;
+  private static $database: any = null;
 
   public static async connect() {
     try {
@@ -28,9 +28,13 @@ export class MongoDB {
     }
   }
 
-  public static getDB() {
+  public static async getDB() {
     if (!this.dbConnected) {
-      console.error('MongoDB is not connected');
+      await this.connect();
+      if (this.$database) {
+        return this.$database;
+      }
+      // console.error('MongoDB is not connected');
     } else {
       return this.$database;
     }

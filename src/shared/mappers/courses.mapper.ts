@@ -1,30 +1,4 @@
-import { Course, CourseDTO, CourseBasic, Lesson, LessonSimple } from '@types';
-
-export function mapToBasicCourse(course: Course): CourseBasic {
-  return {
-    id: course.id,
-    href: course.href,
-    name: course.name,
-    title: course.title,
-    programingLanguage: course.programingLanguage,
-    description: course.description,
-  };
-}
-
-export function mapToDtoCourse(course: Course): CourseDTO {
-  return {
-    id: course.id,
-    href: course.href,
-    name: course.name,
-    title: course.title,
-    programingLanguage: course.programingLanguage,
-    description: course.description,
-    lessons:
-      course.lessons && course.lessons.length > 0
-        ? course.lessons.map(mapToSimpleLesson)
-        : [],
-  };
-}
+import { Lesson, LessonSimple } from '@types';
 
 export function mapToSimpleLesson(lesson: Lesson): LessonSimple {
   return {

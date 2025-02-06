@@ -1,15 +1,5 @@
 import { ProgramingLanguage } from '@types';
 
-export interface Course {
-  id: string;
-  href: string;
-  name: string; // short name, like to be used in cramped lists
-  title: string; // long name, used in full page
-  programingLanguage: ProgramingLanguage;
-  description: string;
-  lessons: Lesson[];
-}
-
 export interface CourseBasic {
   id: string;
   href: string;
@@ -19,15 +9,6 @@ export interface CourseBasic {
   description: string;
 }
 
-export interface CourseDTO {
-  id: string;
-  href: string;
-  name: string;
-  title: string;
-  programingLanguage: ProgramingLanguage;
-  description: string;
-  lessons: LessonSimple[];
-}
 export interface Lesson {
   id: string;
   href: string;
@@ -37,7 +18,7 @@ export interface Lesson {
   name: string;
   title: string;
   description: string;
-  content?: Array<LessonContent>;
+  content: Array<LessonContent>;
 }
 
 export interface LessonSimple {

@@ -1,15 +1,16 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction} from 'express';
 import { appConfig } from '@config';
 import { getListOfCourses } from './controllers/get.all-courses-list.controller';
 import { getCourse } from './controllers/get.course.controller';
 import { getLesson } from './controllers/get.lesson.controller';
+import { getCourseLessons } from './controllers/get.course-lessons.controller';
 
 export const coursesRouter = Router();
 
 coursesRouter.get('/courses-list',
-  (req, res, next) => {
+  (req: Request, res: Response, next) => {
     if (appConfig.logging.console.onRequset) {
-      console.log('GET /v2/courses/courses-list');
+      console.log('GET /courses-list');
     }
     next();
   },
@@ -19,17 +20,27 @@ coursesRouter.get('/courses-list',
 coursesRouter.get('/course',
   (req, res, next) => {
     if (appConfig.logging.console.onRequset) {
-      console.log('GET /v2/course');
+      console.log('GET /course');
     }
     next();
   },
   getCourse
 );
 
+coursesRouter.get('/course-lessons',
+  (req, res, next) => {
+    if (appConfig.logging.console.onRequset) {
+      console.log('GET /course-lessons');
+    }
+    next();
+  },
+  getCourseLessons
+);
+
 coursesRouter.get('/lesson',
   (req, res, next) => {
     if (appConfig.logging.console.onRequset) {
-      console.log('GET /v2/lesson');
+      console.log('GET /lesson');
     }
     next();
   },
