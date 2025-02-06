@@ -17,7 +17,8 @@ class CourseService {
         return __awaiter(this, void 0, void 0, function* () {
             const courses = [];
             const collectionName = 'courses';
-            const responce = yield _database_1.MongoDB.getDB()
+            const db = yield _database_1.MongoDB.getDB();
+            const responce = yield db
                 .collection(collectionName)
                 .find()
                 .toArray();
@@ -25,7 +26,7 @@ class CourseService {
                 return [];
             }
             for (const course of responce) {
-                courses.push((0, _mappers_1.mapToBasicCourse)(course));
+                courses.push(course);
             }
             return courses;
         });
@@ -34,28 +35,39 @@ class CourseService {
         return __awaiter(this, void 0, void 0, function* () {
             let course = null;
             const collectionName = 'courses';
-            const courseResponce = yield _database_1.MongoDB.getDB()
+            const db = yield _database_1.MongoDB.getDB();
+            const courseResponce = yield db
                 .collection(collectionName)
                 .findOne({ href: courseHref });
-            const lessonsResponce = yield _database_1.MongoDB.getDB()
-                .collection(`${courseHref}-lessons`)
-                .find()
-                .toArray();
             if (courseResponce) {
-                course = (0, _mappers_1.mapToDtoCourse)(courseResponce);
-                if (lessonsResponce && lessonsResponce.length > 0) {
-                    for (const lesson of lessonsResponce) {
-                        course.lessons.push((0, _mappers_1.mapToSimpleLesson)(lesson));
-                    }
-                }
+                course = courseResponce;
             }
             return course;
+        });
+    }
+    static getCourseLessons(courseHref) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const lessons = [];
+            const collectionName = `${courseHref}-lessons`;
+            const db = yield _database_1.MongoDB.getDB();
+            const responce = yield db
+                .collection(collectionName)
+                .find()
+                .toArray();
+            if (!responce) {
+                return [];
+            }
+            for (const lesson of responce) {
+                lessons.push((0, _mappers_1.mapToSimpleLesson)(lesson));
+            }
+            return lessons;
         });
     }
     static getLesson(courseHref, lessonHref) {
         return __awaiter(this, void 0, void 0, function* () {
             const collectionName = `${courseHref}-lessons`;
-            const responce = yield _database_1.MongoDB.getDB()
+            const db = yield _database_1.MongoDB.getDB();
+            const responce = yield db
                 .collection(collectionName)
                 .findOne({ href: lessonHref });
             if (responce) {

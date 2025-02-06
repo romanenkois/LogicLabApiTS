@@ -31,12 +31,18 @@ class MongoDB {
         });
     }
     static getDB() {
-        if (!this.dbConnected) {
-            console.error('MongoDB is not connected');
-        }
-        else {
-            return this.$database;
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.dbConnected) {
+                yield this.connect();
+                if (this.$database) {
+                    return this.$database;
+                }
+                // console.error('MongoDB is not connected');
+            }
+            else {
+                return this.$database;
+            }
+        });
     }
 }
 exports.MongoDB = MongoDB;
@@ -51,3 +57,4 @@ MongoDB.client = new mongodb_1.MongoClient(_a.connectionUri || '', {
     },
 });
 MongoDB.dbConnected = false;
+MongoDB.$database = null;

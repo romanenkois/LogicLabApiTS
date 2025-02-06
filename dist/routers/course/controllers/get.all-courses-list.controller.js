@@ -14,9 +14,9 @@ const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
 const getListOfCourses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const courses = {};
-        _services_1.CourseService.getCoursesList();
-        res.status(200).json(courses);
+        const courses = yield _services_1.CourseService.getCoursesList();
+        res.status(200).json({ courses: courses });
+        return;
     }
     catch (error) {
         (0, _utils_1.errorHandler)(res, error);

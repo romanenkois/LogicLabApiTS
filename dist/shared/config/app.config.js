@@ -9,9 +9,9 @@ dotenv_1.default.config();
 exports.appDeployment = process.env.APP_DEPLOYMENT || 'production';
 exports.appConfig = {
     server: {
-        localHost: process.env.LOCAL_HOST || false, // determines, if host value is used
+        // localHost: process.env.LOCAL_HOST || false, // determines, if host value is used
         port: process.env.PORT || 3000,
-        host: process.env.HOST || '0.0.0.0',
+        // host: process.env.HOST || '0.0.0.0',
     },
     logging: {
         console: {
@@ -38,9 +38,9 @@ exports.appConfig = {
     },
     other: {
         // link to router documentation
-        apiDocumentationLink: 'https://github.com/romanenkois/logicLab',
+        apiDocumentationLink: process.env.LOGICLAB_API_DOCUMENTATION_URL || '#',
         // link to itself hosted url
-        logicLab_link: 'https://logic-lab-two.vercel.app/home',
+        logicLab_link: process.env.LOGICLAB_URL || '#',
         // responce to GET '/'
         basic_page_response: `
       <DOCTYPE html>

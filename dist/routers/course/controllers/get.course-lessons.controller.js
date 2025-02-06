@@ -9,33 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLesson = void 0;
+exports.getCourseLessons = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
-const getLesson = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getCourseLessons = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const courseName = req.query['course'];
-        const lessonName = req.query['lesson'];
-        if (!courseName || courseName.trim() === '') {
-            res.status(400).json({ message: 'Course name is required' });
+        const courseHref = req.query['course'];
+        if (!courseHref || courseHref.trim() === '') {
+            res.status(400).json({ error: 'courseHref is required' });
             return;
         }
-        if (!lessonName || lessonName.trim() === '') {
-            res.status(400).json({ message: 'Lesson name is required' });
-            return;
-        }
-        const lesson = yield _services_1.CourseService.getLesson(courseName, lessonName);
-        if (lesson) {
-            res.status(200).json({ lesson: lesson });
-            return;
-        }
-        else {
-            res.status(404).json({ error: 'Lesson not found' });
-            return;
-        }
+        const courseLessons = yield _services_1.CourseService.getCourseLessons(courseHref);
+        res.status(200).json({ lessons: courseLessons });
+        return;
     }
     catch (error) {
         (0, _utils_1.errorHandler)(res, error);
     }
 });
-exports.getLesson = getLesson;
+exports.getCourseLessons = getCourseLessons;
