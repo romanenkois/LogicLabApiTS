@@ -2,7 +2,7 @@ import express, { Request, Response, Router } from "express";
 import cors from "cors";
 
 import { appConfig } from '@config';
-import { coursesRouter, defaultRouter } from "@routers";
+import { coursesRouter, defaultRouter, testsRouter } from "@routers";
 import { sendTelegramMessage } from "@utils";
 import { MongoDB } from "@database";
 
@@ -16,6 +16,7 @@ const v2Router = Router();  // the router of whole app,
                             // previos v1 was made by javascript
 
 v2Router.use('/courses', coursesRouter);
+v2Router.use('/tests', testsRouter);
 app.use('/v2', v2Router);
 app.use('/', defaultRouter); // default router for basic non-app responces
 

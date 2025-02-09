@@ -1,7 +1,6 @@
 import { MongoDB } from '@database';
 import { mapToSimpleLesson } from '@mappers';
 import { CourseBasic, Lesson, LessonSimple } from '@types';
-import { getCourse } from 'src/routers/course/controllers/get.course.controller';
 
 export class CourseService {
   public static async getCoursesList(): Promise<CourseBasic[]> {
