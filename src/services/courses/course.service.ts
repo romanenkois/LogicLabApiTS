@@ -1,10 +1,10 @@
 import { MongoDB } from '@database';
-import { mapToSimpleLesson } from '@mappers';
-import { CourseBasic, Lesson, LessonSimple } from '@types';
+import { CourseMapper } from '@mappers';
+import { Course, Lesson, LessonSimple } from '@types';
 
 export class CourseService {
-  public static async getCoursesList(): Promise<CourseBasic[]> {
-    const courses: CourseBasic[] = [];
+  public static async getCoursesList(): Promise<Course[]> {
+    const courses: Course[] = [];
     const collectionName = 'courses';
     const db = await MongoDB.getDB();
 
@@ -18,14 +18,14 @@ export class CourseService {
     }
 
     for (const course of responce) {
-      courses.push(course as CourseBasic);
+      courses.push(course as Course);
     }
 
     return courses;
   }
 
-  public static async getCourse(courseHref: string): Promise<CourseBasic | null> {
-    let course: CourseBasic | null = null;
+  public static async getCourse(courseHref: string): Promise<Course | null> {
+    let course: Course | null = null;
     const collectionName = 'courses';
     const db = await MongoDB.getDB();
 
@@ -34,7 +34,7 @@ export class CourseService {
       .findOne({ href: courseHref });
 
     if (courseResponce) {
-      course = courseResponce as CourseBasic;
+      course = courseResponce as Course;
     }
 
     return course;
@@ -55,7 +55,7 @@ export class CourseService {
     }
 
     for (const lesson of responce) {
-      lessons.push(mapToSimpleLesson(lesson as Lesson));
+      lessons.push(CourseMapper.mapToSimpleLesson(lesson as Lesson));
     }
 
     return lessons;

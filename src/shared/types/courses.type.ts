@@ -1,6 +1,6 @@
 import { ProgramingLanguage } from '@types';
 
-export interface CourseBasic {
+export interface Course {
   id: string;
   href: string;
   name: string;
@@ -8,6 +8,10 @@ export interface CourseBasic {
   programingLanguage: ProgramingLanguage;
   description: string;
 }
+
+// rn in a moment, DTO of course is the same
+// used to be future proof
+export interface CourseSimple extends Course {};
 
 export interface Lesson {
   id: string;
@@ -21,16 +25,7 @@ export interface Lesson {
   content: Array<LessonContent>;
 }
 
-export interface LessonSimple {
-  id: string;
-  href: string;
-  courseHref: string;
-  category?: string;
-  position: number;
-  name: string;
-  title: string;
-  description: string;
-}
+export type LessonSimple = Omit<Lesson, 'content'>;
 
 export type LessonContent =
   | PlainTextBlock
