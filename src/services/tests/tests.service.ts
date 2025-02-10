@@ -14,7 +14,6 @@ export class TestsService {
 
     const db = await MongoDB.getDB();
 
-
     return isRight;
   }
 }

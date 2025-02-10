@@ -18,6 +18,8 @@ export interface Lesson {
   href: string;
   courseHref: string;
   category?: string;
+  // name is only present if category is present
+  categoryName?: string & (undefined extends Lesson['category'] ? never : unknown);
   position: number;
   name: string;
   title: string;
@@ -34,10 +36,11 @@ export type LessonContent =
 
 interface LessonBlock {
   type: string;
+  position: number;
   object: object;
 }
 
-interface PlainTextBlock extends LessonBlock {
+export interface PlainTextBlock extends LessonBlock {
   type: 'plain-text';
   object: {
     title?: string;
@@ -45,7 +48,7 @@ interface PlainTextBlock extends LessonBlock {
   }
 }
 
-interface ListBlock extends LessonBlock {
+export interface ListBlock extends LessonBlock {
   type: 'list';
   object: {
     title?: string;
@@ -53,7 +56,7 @@ interface ListBlock extends LessonBlock {
   }
 }
 
-interface CodeSampleBlock extends LessonBlock {
+export interface CodeSampleBlock extends LessonBlock {
   type: 'code-sample';
   object: {
     title?: string;

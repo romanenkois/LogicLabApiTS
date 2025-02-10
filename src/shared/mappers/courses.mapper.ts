@@ -12,18 +12,21 @@ export class CourseMapper {
     };
   }
 
-
   public static mapToSimpleLesson(lesson: Lesson): LessonSimple {
     return {
       id: lesson.id,
       href: lesson.href,
       courseHref: lesson.courseHref,
-      ...(lesson.category && { category: lesson.category }), // only include, if it was in original object
+
+      // this ensures that category and categoryName are only present together
+      ...(lesson.category && lesson.categoryName
+        ? { category: lesson.category, categoryName: lesson.categoryName }
+        : {}),
+
       position: lesson.position,
       name: lesson.name,
       title: lesson.title,
       description: lesson.description,
     };
   }
-
 }
