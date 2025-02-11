@@ -29,4 +29,8 @@ export class CourseMapper {
       description: lesson.description,
     };
   }
+
+  public static sortSimpleLessons(lessons: LessonSimple[]): LessonSimple[] {
+    return lessons.sort((a, b) => a.position - b.position);
+  }
 }

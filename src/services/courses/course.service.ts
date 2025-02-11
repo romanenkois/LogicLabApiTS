@@ -41,13 +41,14 @@ export class CourseService {
   }
 
   public static async getCourseLessons(courseHref: string): Promise<LessonSimple[]> {
-    const lessons: LessonSimple[] = [];
+    let lessons: LessonSimple[] = [];
     const collectionName = `${courseHref}-lessons`;
     const db = await MongoDB.getDB();
 
     const responce = await db
       .collection(collectionName)
       .find()
+      .sort({ order: 1 })
       .toArray();
 
     if (!responce) {
@@ -57,6 +58,8 @@ export class CourseService {
     for (const lesson of responce) {
       lessons.push(CourseMapper.mapToSimpleLesson(lesson as Lesson));
     }
+
+    lessons = CourseMapper.sortSimpleLessons(lessons);
 
     return lessons;
   }
