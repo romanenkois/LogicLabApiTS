@@ -4,45 +4,11 @@ import { getListOfCourses } from './controllers/get.all-courses-list.controller'
 import { getCourse } from './controllers/get.course.controller';
 import { getLesson } from './controllers/get.lesson.controller';
 import { getCourseLessons } from './controllers/get.course-lessons.controller';
+import { routerHandler } from '@utils';
 
 export const coursesRouter = Router();
 
-coursesRouter.get('/courses-list',
-  (req: Request, res: Response, next) => {
-    if (appConfig.logging.console.onRequset) {
-      console.log('GET /courses-list');
-    }
-    next();
-  },
-  getListOfCourses
-);
-
-coursesRouter.get('/course',
-  (req, res, next) => {
-    if (appConfig.logging.console.onRequset) {
-      console.log('GET /course');
-    }
-    next();
-  },
-  getCourse
-);
-
-coursesRouter.get('/course-lessons',
-  (req, res, next) => {
-    if (appConfig.logging.console.onRequset) {
-      console.log('GET /course-lessons');
-    }
-    next();
-  },
-  getCourseLessons
-);
-
-coursesRouter.get('/lesson',
-  (req, res, next) => {
-    if (appConfig.logging.console.onRequset) {
-      console.log('GET /lesson');
-    }
-    next();
-  },
-  getLesson
-);
+coursesRouter.get('/courses-list', routerHandler, getListOfCourses);
+coursesRouter.get('/course', routerHandler, getCourse);
+coursesRouter.get('/course-lessons', routerHandler, getCourseLessons);
+coursesRouter.get('/lesson', routerHandler, getLesson);
