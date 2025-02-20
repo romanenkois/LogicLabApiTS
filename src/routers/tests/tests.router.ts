@@ -1,5 +1,4 @@
-import { Router, Request, Response } from 'express';
-import { appConfig } from '@config';
+import { Router } from 'express';
 import { getTestData } from './controllers/get.test-data.controller';
 import { checkTestAnswer } from './controllers/post.test-check.controllers';
 import { routerHandler } from '@utils';

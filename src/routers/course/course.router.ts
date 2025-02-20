@@ -1,5 +1,4 @@
-import { Router, Request, Response } from 'express';
-import { appConfig } from '@config';
+import { Router } from 'express';
 import { getListOfCourses } from './controllers/get.all-courses-list.controller';
 import { getCourse } from './controllers/get.course.controller';
 import { getLesson } from './controllers/get.lesson.controller';
