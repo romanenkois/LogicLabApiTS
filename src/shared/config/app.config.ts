@@ -47,6 +47,10 @@ export const appConfig = {
         <p>If you ended up here by accident, go back to <a href="__LOGIC_LAB_LINK__">logicLab</a></p>
         </body>
       </html>`,
+
+    headerSizeLimit: 10 * 1024,
+    bodySizeLimit: 10 * 1024 * 1024,
+    
   },
   featureFlags: {
 

@@ -30,10 +30,12 @@
     "baseUrl": "./",                                     /* Specify the base directory to resolve non-relative module names. */
     "paths": {                                           /* Specify a set of entries that re-map imports to additional lookup locations. */
       "@database": ["src/database/index.ts"],
+      "@middleware": ["src/middleware/index.ts"],
       "@routers": ["src/routers/index.ts"],
       "@services": ["src/services/index.ts"],
 
       "@config": ["src/shared/config/index.ts"],
+      "@logger": ["src/shared/logger/index.ts"],
       "@mappers": ["src/shared/mappers/index.ts"],
       "@types": ["src/shared/types/index.ts"],
       "@utils": ["src/shared/utils/index.ts"],

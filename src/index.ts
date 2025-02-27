@@ -3,20 +3,24 @@ import cors from "cors";
 
 import { appConfig } from '@config';
 import { coursesRouter, defaultRouter, testsRouter } from "@routers";
-import { jsonErrorHandler, sendTelegramMessage } from "@utils";
+import { sendTelegramMessage } from "@utils";
 import { MongoDB } from "@database";
+import { headerSizeLimiter, bodySizeLimiter, routerHandler, jsonErrorHandler } from "@middleware";
 
 const app = express();
 app.use(cors());
 
-app.use(express.json());
-app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
-  jsonErrorHandler(err, req, res, next);
-});
+app.use(headerSizeLimiter());
+app.use(bodySizeLimiter);
 
-const v2Router = Router();  // the router of whole app,
-                            // this this v2, couse it is a second version
-                            // previos v1 was made by javascript
+app.use(express.json({ limit: appConfig.other.bodySizeLimit }));
+app.use(express.urlencoded({ limit: appConfig.other.bodySizeLimit, extended: true }));
+
+app.use(jsonErrorHandler);
+app.use(routerHandler);
+
+// main router, v2 is the most actual version of the app
+const v2Router = Router();
 
 v2Router.use('/courses', coursesRouter);
 v2Router.use('/tests', testsRouter);

@@ -1,1 +1,1 @@
-export { MongoDB } from './main';
+export { MongoDB } from './database';
