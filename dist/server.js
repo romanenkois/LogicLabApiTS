@@ -47,26 +47,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importStar(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const _config_1 = require("./shared/config/index.js");
+const _config_1 = require("./config/index.js");
 const _routers_1 = require("./routers/index.js");
 const _utils_1 = require("./shared/utils/index.js");
 const _database_1 = require("./database/index.js");
+const _middleware_1 = require("./middleware/index.js");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
-app.use(express_1.default.json());
-app.use(express_1.default.urlencoded({ extended: true }));
-const v2Router = (0, express_1.Router)(); // the router of whole app,
-// this this v2, couse it is a second version
-// previos v1 was made by javascript
+app.use((0, _middleware_1.headerSizeLimiter)());
+app.use(_middleware_1.bodySizeLimiter);
+app.use(express_1.default.json({ limit: _config_1.appConfig.bodySizeLimit }));
+app.use(express_1.default.urlencoded({ limit: _config_1.appConfig.bodySizeLimit, extended: true }));
+app.use(_middleware_1.jsonErrorHandler);
+app.use(_middleware_1.routerHandler);
+// main router, v2 is the most actual version of the app
+const v2Router = (0, express_1.Router)();
 v2Router.use('/courses', _routers_1.coursesRouter);
+v2Router.use('/tests', _routers_1.testsRouter);
 app.use('/v2', v2Router);
-app.use('/', _routers_1.defaultRouter); // default router for basic non-app responces
-const PORT = _config_1.appConfig.server.port;
+app.use('/', _routers_1.defaultRouter); // default router for basic non-app responces, doesnt need versioning
+const PORT = _config_1.appConfig.port;
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
-    if (_config_1.appConfig.logging.console.onServerStart) {
-        console.log('logicLabApiTS running on port ', PORT);
+    if (_config_1.loggingConfig.console.onServerStart) {
+        console.log(`logicLabApiTS running on http://localhost:${PORT}`);
     }
-    if (_config_1.appConfig.logging.telegram.onServerStart) {
+    if (_config_1.loggingConfig.telegram.onServerStart) {
         (0, _utils_1.sendTelegramMessage)('logicLabApiTS running');
     }
     yield _database_1.MongoDB.connect();

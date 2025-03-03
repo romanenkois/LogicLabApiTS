@@ -1,6 +1,6 @@
-import { appConfig } from "@config";
+import { telegramConfig } from "@config";
 
-const url = `https://api.telegram.org/bot${appConfig.telegram.botId}/sendMessage?chat_id=${appConfig.telegram.adminChatId}&text=`;
+const url = `https://api.telegram.org/bot${telegramConfig.botId}/sendMessage?chat_id=${telegramConfig.adminChatId}&text=`;
 
 export async function sendTelegramMessage(text: string) {
   const responce = await fetch(url + text)

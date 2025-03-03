@@ -11,9 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseService = void 0;
 const _database_1 = require("../../database/index.js");
-const _mappers_1 = require("../../shared/mappers/index.js");
 class CourseService {
-    static getCoursesList() {
+    // TODO: add selection option
+    static getCoursesList(selectionOption) {
         return __awaiter(this, void 0, void 0, function* () {
             const courses = [];
             const collectionName = 'courses';
@@ -45,27 +45,9 @@ class CourseService {
             return course;
         });
     }
-    static getCourseLessons(courseHref) {
+    static getLesson(lessonHref) {
         return __awaiter(this, void 0, void 0, function* () {
-            const lessons = [];
-            const collectionName = `${courseHref}-lessons`;
-            const db = yield _database_1.MongoDB.getDB();
-            const responce = yield db
-                .collection(collectionName)
-                .find()
-                .toArray();
-            if (!responce) {
-                return [];
-            }
-            for (const lesson of responce) {
-                lessons.push((0, _mappers_1.mapToSimpleLesson)(lesson));
-            }
-            return lessons;
-        });
-    }
-    static getLesson(courseHref, lessonHref) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const collectionName = `${courseHref}-lessons`;
+            const collectionName = `lessons`;
             const db = yield _database_1.MongoDB.getDB();
             const responce = yield db
                 .collection(collectionName)
@@ -75,6 +57,48 @@ class CourseService {
             }
             else {
                 return null;
+            }
+        });
+    }
+    static addCourse(course) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const collectionName = 'courses';
+            const db = yield _database_1.MongoDB.getDB();
+            let course_ = course;
+            course_.id = undefined;
+            const responce = yield db.collection(collectionName).insertOne(course_);
+            if (responce.insertedId) {
+                const course__ = yield this.getCourse(course.href);
+                if (course__) {
+                    return course__;
+                }
+                else {
+                    throw new Error('Failed to add course');
+                }
+            }
+            else {
+                throw new Error('Failed to add course');
+            }
+        });
+    }
+    static addLesson(lesson) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const collectionName = 'lessons';
+            const db = yield _database_1.MongoDB.getDB();
+            let lesson_ = lesson;
+            lesson_.id = undefined;
+            const responce = yield db.collection(collectionName).insertOne(lesson);
+            if (responce.insertedId) {
+                const lesson__ = yield this.getLesson(lesson.href);
+                if (lesson__) {
+                    return lesson__;
+                }
+                else {
+                    throw new Error('Failed to add lesson');
+                }
+            }
+            else {
+                throw new Error('Failed to add lesson');
             }
         });
     }

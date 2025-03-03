@@ -15,22 +15,12 @@ const _services_1 = require("../../../services/index.js");
 const getCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const courseName = req.query['course'];
-        const getCourseLessons = req.query['getLessons']; // should be 'true', false by default
         if (!courseName || courseName.trim() === '') {
             res.status(400).json({ message: 'Course name is required' });
             return;
         }
-        const [course, courseLessons] = yield Promise.all([
-            _services_1.CourseService.getCourse(courseName),
-            getCourseLessons && getCourseLessons.trim().toLowerCase() === 'true'
-                ? _services_1.CourseService.getCourseLessons(courseName)
-                : Promise.resolve([]),
-        ]);
+        const course = yield _services_1.CourseService.getCourse(courseName);
         if (course) {
-            if (getCourseLessons && getCourseLessons.trim().toLowerCase() === 'true') {
-                res.status(200).json({ course: course, lessons: courseLessons });
-                return;
-            }
             res.status(200).json({ course: course });
             return;
         }

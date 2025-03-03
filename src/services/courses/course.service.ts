@@ -1,9 +1,10 @@
 import { MongoDB } from '@database';
 import { CourseMapper } from '@mappers';
-import { Course, Lesson, LessonSimple } from '@types';
+import { Course, Lesson, LessonSimple, SelectionOption } from '@types';
 
 export class CourseService {
-  public static async getCoursesList(): Promise<Course[]> {
+  // TODO: add selection option
+  public static async getCoursesList(selectionOption?: SelectionOption): Promise<Course[]> {
     const courses: Course[] = [];
     const collectionName = 'courses';
     const db = await MongoDB.getDB();
@@ -40,35 +41,10 @@ export class CourseService {
     return course;
   }
 
-  public static async getCourseLessons(courseHref: string): Promise<LessonSimple[]> {
-    let lessons: LessonSimple[] = [];
-    const collectionName = `${courseHref}-lessons`;
-    const db = await MongoDB.getDB();
-
-    const responce = await db
-      .collection(collectionName)
-      .find()
-      .sort({ order: 1 })
-      .toArray();
-
-    if (!responce) {
-      return [];
-    }
-
-    for (const lesson of responce) {
-      lessons.push(CourseMapper.mapToSimpleLesson(lesson as Lesson));
-    }
-
-    lessons = CourseMapper.sortSimpleLessons(lessons);
-
-    return lessons;
-  }
-
   public static async getLesson(
-    courseHref: string,
     lessonHref: string
   ): Promise<Lesson | null> {
-    const collectionName = `${courseHref}-lessons`;
+    const collectionName = `lessons`;
     const db = await MongoDB.getDB();
 
     const responce = await db
@@ -79,6 +55,49 @@ export class CourseService {
       return responce as Lesson;
     } else {
       return null;
+    }
+  }
+
+  public static async addCourse(course: Course): Promise<Course | null> {
+    const collectionName = 'courses';
+    const db = await MongoDB.getDB();
+
+    let course_: any = course;
+    course_.id = undefined;
+
+    const responce = await db.collection(collectionName).insertOne(course_);
+
+    if (responce.insertedId) {
+      const course__ = await this.getCourse(course.href);
+      
+      if (course__) {
+        return course__;
+      } else {
+        throw new Error('Failed to add course');
+      }
+    } else {
+      throw new Error('Failed to add course');
+    }
+  }
+
+  public static async addLesson(lesson: Lesson): Promise<Lesson | null> {
+    const collectionName = 'lessons';
+    const db = await MongoDB.getDB();
+
+    let lesson_: any = lesson;
+    lesson_.id = undefined;
+
+    const responce = await db.collection(collectionName).insertOne(lesson);
+
+    if (responce.insertedId) {
+      const lesson__ = await this.getLesson(lesson.href);
+      if (lesson__) {
+        return lesson__;
+      } else {
+        throw new Error('Failed to add lesson');
+      }
+    } else {
+      throw new Error('Failed to add lesson');
     }
   }
 }

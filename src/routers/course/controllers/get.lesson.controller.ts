@@ -5,19 +5,14 @@ import { Lesson } from '@types';
 
 export const getLesson = async (req: Request, res: Response) => {
   try {
-    const courseName= req.query['course'] as string;
-    const lessonName = req.query['lesson'] as string;
+    const lessonhref = req.query['lesson'] as string;
 
-    if (!courseName || courseName.trim() === '') {
-      res.status(400).json({ message: 'Course name is required' });
-      return;
-    }
-    if (!lessonName || lessonName.trim() === '') {
+    if (!lessonhref || lessonhref.trim() === '') {
       res.status(400).json({ message: 'Lesson name is required' });
       return;
     }
 
-    const lesson: Lesson | null = await CourseService.getLesson(courseName, lessonName);
+    const lesson: Lesson | null = await CourseService.getLesson(lessonhref);
 
     if (lesson) {
       res.status(200).json({ lesson: lesson });

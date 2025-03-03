@@ -10,11 +10,3 @@ export type Test = {
     strictSolution: string[];
   }
 }
-
-export type TestDto = {
-  id: string;
-  href: string;
-  question: {
-
-  }
-}

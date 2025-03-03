@@ -14,17 +14,12 @@ const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
 const getLesson = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const courseName = req.query['course'];
-        const lessonName = req.query['lesson'];
-        if (!courseName || courseName.trim() === '') {
-            res.status(400).json({ message: 'Course name is required' });
-            return;
-        }
-        if (!lessonName || lessonName.trim() === '') {
+        const lessonhref = req.query['lesson'];
+        if (!lessonhref || lessonhref.trim() === '') {
             res.status(400).json({ message: 'Lesson name is required' });
             return;
         }
-        const lesson = yield _services_1.CourseService.getLesson(courseName, lessonName);
+        const lesson = yield _services_1.CourseService.getLesson(lessonhref);
         if (lesson) {
             res.status(200).json({ lesson: lesson });
             return;

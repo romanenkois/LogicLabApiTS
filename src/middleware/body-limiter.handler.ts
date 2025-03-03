@@ -7,7 +7,7 @@ import { appConfig } from '@config';
  */
 export const bodySizeLimiter = (req: Request, res: Response, next: Function) => {
   json({
-    limit: `${appConfig.other.bodySizeLimit}b`
+    limit: `${appConfig.bodySizeLimit}b`
   })(req, res, (err) => {
     if (err) {
       if (err.type === 'entity.too.large') {

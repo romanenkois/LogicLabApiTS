@@ -12,7 +12,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MongoDB = void 0;
 const mongodb_1 = require("mongodb");
-const _config_1 = require("../shared/config/index.js");
+const _config_1 = require("../config/index.js");
 class MongoDB {
     static connect() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -21,7 +21,7 @@ class MongoDB {
                 yield this.client.db(this.dbName).command({ ping: 1 }); // ping to test connection
                 this.dbConnected = true;
                 this.$database = this.client.db(this.dbName);
-                if (_config_1.appConfig.logging.console.onDataBaseConnect) {
+                if (_config_1.loggingConfig.console.onDataBaseConnect) {
                     console.log('MongoDB connected');
                 }
             }
@@ -47,8 +47,8 @@ class MongoDB {
 }
 exports.MongoDB = MongoDB;
 _a = MongoDB;
-MongoDB.connectionUri = _config_1.appConfig.database.mongo.connectionUri;
-MongoDB.dbName = _config_1.appConfig.database.mongo.dbName;
+MongoDB.connectionUri = _config_1.databaseConfig.mongo.connectionUri;
+MongoDB.dbName = _config_1.databaseConfig.mongo.dbName;
 MongoDB.client = new mongodb_1.MongoClient(_a.connectionUri || '', {
     serverApi: {
         version: mongodb_1.ServerApiVersion.v1,

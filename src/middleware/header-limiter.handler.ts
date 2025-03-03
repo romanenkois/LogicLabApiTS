@@ -8,7 +8,7 @@ export const headerSizeLimiter = () =>
   (req: Request, res: Response, next: NextFunction): void => {
     const headerSize = Buffer.byteLength(JSON.stringify(req.headers));
 
-    if (headerSize > appConfig.other.headerSizeLimit) {
+    if (headerSize > appConfig.headerSizeLimit) {
       res.status(431).json({
         error: 'Request header size too large',
       });

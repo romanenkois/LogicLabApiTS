@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.telegramConfig = exports.sharedConfig = exports.loggingConfig = exports.databaseConfig = exports.appDeployment = exports.appConfig = void 0;
+var app_config_1 = require("./app.config");
+Object.defineProperty(exports, "appConfig", { enumerable: true, get: function () { return app_config_1.appConfig; } });
+Object.defineProperty(exports, "appDeployment", { enumerable: true, get: function () { return app_config_1.appDeployment; } });
+var database_config_1 = require("./database.config");
+Object.defineProperty(exports, "databaseConfig", { enumerable: true, get: function () { return database_config_1.databaseConfig; } });
+var logging_config_1 = require("./logging.config");
+Object.defineProperty(exports, "loggingConfig", { enumerable: true, get: function () { return logging_config_1.loggingConfig; } });
+var shared_config_1 = require("./shared.config");
+Object.defineProperty(exports, "sharedConfig", { enumerable: true, get: function () { return shared_config_1.sharedConfig; } });
+var telegram_config_1 = require("./telegram.config");
+Object.defineProperty(exports, "telegramConfig", { enumerable: true, get: function () { return telegram_config_1.telegramConfig; } });

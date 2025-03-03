@@ -14,7 +14,11 @@ const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
 const getListOfCourses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const courses = yield _services_1.CourseService.getCoursesList();
+        let selectionOption = req.query['selection'];
+        if (!selectionOption || selectionOption.trim() === '') {
+            selectionOption = 'all';
+        }
+        const courses = yield _services_1.CourseService.getCoursesList(selectionOption);
         res.status(200).json({ courses: courses });
         return;
     }

@@ -1,6 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mapToSimpleLesson = mapToSimpleLesson;
-function mapToSimpleLesson(lesson) {
-    return Object.assign(Object.assign({ id: lesson.id, href: lesson.href, courseHref: lesson.courseHref }, (lesson.category && { category: lesson.category })), { position: lesson.position, name: lesson.name, title: lesson.title, description: lesson.description });
+exports.CourseMapper = void 0;
+class CourseMapper {
+    static mapToSimpleCourse(course) {
+        return {
+            id: course.id,
+            href: course.href,
+            name: course.name,
+            title: course.title,
+            programingLanguage: course.programingLanguage,
+            description: course.description,
+        };
+    }
+    static mapToSimpleLesson(lesson) {
+        return {
+            id: lesson.id,
+            href: lesson.href,
+            name: lesson.name,
+            title: lesson.title,
+            description: lesson.description,
+        };
+    }
 }
+exports.CourseMapper = CourseMapper;

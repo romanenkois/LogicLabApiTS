@@ -1,6 +1,5 @@
-export type ProgramingLanguage =
-  | string
-  | 'html'
-  | 'css'
-  | 'javascript'
-  | 'typescript';
+import { ProgramingLanguageSchema } from "@schemas";
+
+export type ProgramingLanguage = ProgramingLanguageSchema;
+
+export type SelectionOption = 'all' | 'popular' | 'new';

@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendTelegramMessage = sendTelegramMessage;
-const _config_1 = require("../config/index.js");
-const url = `https://api.telegram.org/bot${_config_1.appConfig.telegram.botId}/sendMessage?chat_id=${_config_1.appConfig.telegram.adminChatId}&text=`;
+const _config_1 = require("../../config/index.js");
+const url = `https://api.telegram.org/bot${_config_1.telegramConfig.botId}/sendMessage?chat_id=${_config_1.telegramConfig.adminChatId}&text=`;
 function sendTelegramMessage(text) {
     return __awaiter(this, void 0, void 0, function* () {
         const responce = yield fetch(url + text);

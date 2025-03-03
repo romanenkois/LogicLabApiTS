@@ -1,4 +1,5 @@
-export * from './courses.type';
+export { Course, CourseSimple } from './course.type';
 export * from './lesson-fragments.type';
-export * from './shared.type';
-export * from './tests.type';
+export { Lesson, LessonSimple } from './lesson.type';
+export { ProgramingLanguage, SelectionOption } from './shared.type';
+export { Test } from './test.type';

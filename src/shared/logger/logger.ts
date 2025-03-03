@@ -1,4 +1,4 @@
-import { appConfig } from "@config";
+import { loggingConfig } from "@config";
 
 export class Logger {
   /**
@@ -16,7 +16,7 @@ export class Logger {
     headers?: Record<string, string>;
     body?: string;
   }) {
-    if (appConfig.logging.console.onRequset) {
+    if (loggingConfig.console.onRequset) {
       console.log(`Request: ${request.method} ${request.url}`);
     }
   }

@@ -1,9 +1,9 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
-import { appConfig } from '@config';
+import { loggingConfig, databaseConfig } from '@config';
 
 export class MongoDB {
-  private static readonly connectionUri = appConfig.database.mongo.connectionUri;
-  private static readonly dbName = appConfig.database.mongo.dbName;
+  private static readonly connectionUri = databaseConfig.mongo.connectionUri;
+  private static readonly dbName = databaseConfig.mongo.dbName;
   private static readonly client = new MongoClient(this.connectionUri || '', {
     serverApi: {
       version: ServerApiVersion.v1,
@@ -20,7 +20,7 @@ export class MongoDB {
       await this.client.db(this.dbName).command({ ping: 1 }); // ping to test connection
       this.dbConnected = true;
       this.$database = this.client.db(this.dbName);
-      if (appConfig.logging.console.onDataBaseConnect) {
+      if (loggingConfig.console.onDataBaseConnect) {
         console.log('MongoDB connected');
       }
     } catch (error) {

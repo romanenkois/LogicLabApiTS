@@ -9,22 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCourseLessons = void 0;
+exports.getTestData = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
-const getCourseLessons = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getTestData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const courseHref = req.query['course'];
-        if (!courseHref || courseHref.trim() === '') {
-            res.status(400).json({ error: 'courseHref is required' });
+        const testId = req.params.id;
+        if (!testId) {
+            res.status(400).json({ error: 'test id is required' });
             return;
         }
-        const courseLessons = yield _services_1.CourseService.getCourseLessons(courseHref);
-        res.status(200).json({ lessons: courseLessons });
+        const test = yield _services_1.TestsService.getTestData(testId);
+        if (!test) {
+            res.status(404).json({ error: 'test not found' });
+            return;
+        }
+        res.status(200).json({ test: test });
         return;
     }
     catch (error) {
         (0, _utils_1.errorHandler)(res, error);
     }
 });
-exports.getCourseLessons = getCourseLessons;
+exports.getTestData = getTestData;
