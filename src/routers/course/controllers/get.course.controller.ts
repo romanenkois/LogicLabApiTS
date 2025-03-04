@@ -5,7 +5,7 @@ import { Course } from '@types';
 
 export const getCourse = async (req: Request, res: Response) => {
   try {
-    const courseName = req.query['course'] as string;
+    const courseName = req.query['href'] as string;
     
     if (!courseName || courseName.trim() === '') {
       res.status(400).json({ message: 'Course name is required' });

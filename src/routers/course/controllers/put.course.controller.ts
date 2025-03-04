@@ -6,7 +6,7 @@ import { Course } from '@types';
 
 export const addCourse = async (req: Request, res: Response) => {
   try {
-    const course: Course = req.body;
+    const course: Course = req.body['course'] as Course;
 
     if (!course || Object.keys(course).length === 0) {
       res.status(400).json({ message: 'Course data is required' });

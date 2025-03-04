@@ -1,7 +1,7 @@
 import { LessonSchema } from "@schemas";
 
-export interface Lesson extends LessonSchema {
-  id: LessonSchema['id'];
+export type Lesson = {
+  id: LessonSchema['_id'];
   href: LessonSchema['href'];
   name: LessonSchema['name'];
   title: LessonSchema['title'];

@@ -1,1 +1,2 @@
-export { CourseMapper } from './courses.mapper';
+export { CourseMapper } from './course.mapper';
+export { LessonMapper } from './lesson.mapper';
