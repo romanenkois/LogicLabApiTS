@@ -5,7 +5,7 @@ import { Lesson } from '@types';
 
 export const addLesson = async (req: Request, res: Response) => {
   try {
-    const lesson: Lesson = req.body;
+    const lesson: Lesson = req.body['lesson'] as Lesson;
 
     if (!lesson || Object.keys(lesson).length === 0) {
       res.status(400).json({ message: 'Lesson data is required' });

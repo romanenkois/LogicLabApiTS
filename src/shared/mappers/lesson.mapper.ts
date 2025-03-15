@@ -1,16 +1,26 @@
 import { LessonSchema } from "@schemas";
-import { Lesson } from "@types";
+import { Lesson, LessonSimple } from "@types";
 
 export class LessonMapper{
-  public static mapFromSchema(LessonSchema: LessonSchema): Lesson {
+  public static mapFromSchema(lessonSchema: LessonSchema): Lesson {
     return {
-      id: LessonSchema._id,
-      href: LessonSchema.href,
-      name: LessonSchema.name,
-      title: LessonSchema.title,
-      description: LessonSchema.description,
-      content: LessonSchema.content,
+      id: lessonSchema._id,
+      href: lessonSchema.href,
+      name: lessonSchema.name,
+      title: lessonSchema.title,
+      description: lessonSchema.description,
+      content: lessonSchema.content,
     };
+  }
+
+  public static mapFromSchemaToSimple(lessonSchema: LessonSchema): LessonSimple {
+    return {
+      id: lessonSchema._id,
+      href: lessonSchema.href,
+      name: lessonSchema.name,
+      title: lessonSchema.title,
+      description: lessonSchema.description,
+    }
   }
 
   public static mapToSchema(lesson: Lesson): LessonSchema {
@@ -23,4 +33,6 @@ export class LessonMapper{
       content: lesson.content,
     };
   }
+
+  
 }

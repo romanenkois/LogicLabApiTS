@@ -1,7 +1,8 @@
 import { LessonContentSchema } from "@schemas";
+import { ObjectId } from "mongodb";
 
 export interface LessonSchema {
-  _id: string;
+  _id: ObjectId;
   href: string;
   name: string;
   title: string;
@@ -10,6 +11,7 @@ export interface LessonSchema {
 }
 
 export interface LessonSimpleSchema {
+  id?: ObjectId;
   href: string;
   category?: string;
   categoryName?: string;

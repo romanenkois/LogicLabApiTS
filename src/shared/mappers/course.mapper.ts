@@ -10,7 +10,7 @@ export class CourseMapper {
       title: courseSchema.title,
       programingLanguage: courseSchema.programingLanguage,
       description: courseSchema.description,
-      lessons: [...courseSchema.lessons],
+      lessons: courseSchema.lessons,
     };
   }
 
@@ -22,7 +22,7 @@ export class CourseMapper {
       title: course.title,
       programingLanguage: course.programingLanguage,
       description: course.description,
-      lessons: [...course.lessons],
+      lessons: course.lessons,
     };
   }
 }
