@@ -14,7 +14,7 @@ const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
 const addCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const course = req.body;
+        const course = req.body['course'];
         if (!course || Object.keys(course).length === 0) {
             res.status(400).json({ message: 'Course data is required' });
             return;

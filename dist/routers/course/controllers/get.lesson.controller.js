@@ -14,7 +14,7 @@ const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
 const getLesson = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const lessonhref = req.query['lesson'];
+        const lessonhref = req.query['href'];
         if (!lessonhref || lessonhref.trim() === '') {
             res.status(400).json({ message: 'Lesson name is required' });
             return;

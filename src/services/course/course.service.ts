@@ -5,15 +5,14 @@ import { Course, Lesson, LessonSimple, SelectionOption } from '@types';
 
 export class CourseService {
   // TODO: add selection option
-  public static async getCoursesList(selectionOption?: SelectionOption): Promise<Course[]> {
+  public static async getCoursesList(
+    selectionOption?: SelectionOption
+  ): Promise<Course[]> {
     const courses: Course[] = [];
     const collectionName = 'courses';
     const db = await MongoDB.getDB();
 
-    const response = await db
-      .collection(collectionName)
-      .find()
-      .toArray();
+    const response = await db.collection(collectionName).find().toArray();
 
     if (!response) {
       return [];
@@ -26,25 +25,22 @@ export class CourseService {
     return courses;
   }
 
-  //   public static async getLessonsList(selectionOption?: any): Promise<Lesson[]> {
-  //     
-  // }
-
   public static async checkForExisting(
     collectionName: 'courses' | 'lessons',
-    params: { id?: string; href?: string },
+    params: { id?: string; href?: string }
   ): Promise<boolean> {
     const db = await MongoDB.getDB();
 
-    const query =
-      params.id ? { _id: params.id } :
-        params.href ? { href: params.href } :
-          {};
+    const query = params.id
+      ? { _id: params.id }
+      : params.href
+      ? { href: params.href }
+      : {};
 
     // Find the document
     const exists = await db.collection(collectionName).findOne(query);
 
-    console.log('ex', exists)
+    console.log('ex', exists);
 
     // Return boolean indicating existence
     return exists !== null;
@@ -66,9 +62,7 @@ export class CourseService {
     return course;
   }
 
-  public static async getLesson(
-    lessonHref: string
-  ): Promise<Lesson | null> {
+  public static async getLesson(lessonHref: string): Promise<Lesson | null> {
     const collectionName = `lessons`;
     const db = await MongoDB.getDB();
 
@@ -83,37 +77,50 @@ export class CourseService {
     }
   }
 
-  public static async getLessons(
-    lessonsHref: string[]
-  ): Promise<LessonSimple[] | null> {
-    const collectionName = 'lessons';
+  public static async getSimpleLesson(lessonHref: string): Promise<LessonSimple | null> {
+    const collectionName = `lessons`;
     const db = await MongoDB.getDB();
-    // TODO: fix
-    const filter = {
-      href: lessonsHref[0],
-    }
-    console.log('filter', filter)
 
-    const response: LessonSchema[] = await db
+    const response: LessonSchema = await db
       .collection(collectionName)
-      .find(filter)
-      .toArray()
-
-      console.log(response)
+      .findOne({ href: lessonHref });
 
     if (response) {
-      return response.map(lesson => LessonMapper.mapFromSchemaToSimple(lesson));
+      return LessonMapper.mapFromSchemaToSimple(response);
     } else {
       return null;
     }
   }
 
+  public static async getSimpleLessons(
+    lessonHref: string[]
+  ): Promise<LessonSimple[]> {
+    const lessons: LessonSimple[] = [];
+    console.log('lessonHref', lessonHref);
+
+    for (const href of lessonHref) {
+      console.log('href', href);
+      const lesson = await this.getSimpleLesson(href);
+      console.log('lesson', lesson);
+      if (lesson) {
+        lessons.push(lesson);
+      }
+    }
+
+    console.log('lessons', lessons);
+    return lessons;
+  }
+
   public static async addCourse(course: Course): Promise<Course | null> {
     const collectionName = 'courses';
     const db = await MongoDB.getDB();
-    const course_: Omit<CourseSchema, '_id'> = CourseMapper.mapToSchema(course as Course);
+    const course_: Omit<CourseSchema, '_id'> = CourseMapper.mapToSchema(
+      course as Course
+    );
 
-    const hasTheSameHref = await this.checkForExisting('courses', { href: course_.href });
+    const hasTheSameHref = await this.checkForExisting('courses', {
+      href: course_.href,
+    });
     if (hasTheSameHref) {
       return null;
     }
@@ -137,9 +144,8 @@ export class CourseService {
     const db = await MongoDB.getDB();
     const lesson_: Omit<LessonSchema, '_id'> = LessonMapper.mapToSchema(lesson);
 
-
     const response = await db.collection(collectionName).insertOne(lesson_);
-    console.log('123')
+    console.log('123');
 
     if (response.insertedId) {
       const lesson__ = await this.getLesson(lesson.href);

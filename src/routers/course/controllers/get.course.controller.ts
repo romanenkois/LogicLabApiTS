@@ -6,7 +6,10 @@ import { Course, LessonSimple } from '@types';
 export const getCourse = async (req: Request, res: Response) => {
   try {
     const courseHref = req.query['href'] as string;
-    const getLessons: boolean = req.query.getlessons === 'true';
+    const getLessons: boolean = req.query['getlessons'] === 'true';
+
+    // console.log('courseHref', courseHref);
+    // console.log('getLessons', getLessons);
 
     if (!courseHref || courseHref.trim() === '') {
       res.status(400).json({ message: 'Course name is required' });
@@ -16,8 +19,11 @@ export const getCourse = async (req: Request, res: Response) => {
     const course: Course | null = await CourseService.getCourse(courseHref);
     const lessons: LessonSimple[] | null =
       course && course.lessons && getLessons
-        ? await CourseService.getLessons(course.lessons.map(lesson => lesson.href))
+        ? await CourseService.getSimpleLessons(course.lessons.map(lesson => lesson.href))
         : null;
+
+    console.log('course', course);
+    console.log('lessons', lessons);
 
     if (course) {
       res.status(200).json({
