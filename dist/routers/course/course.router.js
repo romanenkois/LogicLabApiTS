@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.coursesRouter = void 0;
 const express_1 = require("express");
-const get_all_courses_list_controller_1 = require("./controllers/get.all-courses-list.controller");
+const get_courses_list_controller_1 = require("./controllers/get.courses-list.controller");
 const get_course_controller_1 = require("./controllers/get.course.controller");
 const get_lesson_controller_1 = require("./controllers/get.lesson.controller");
 const put_course_controller_1 = require("./controllers/put.course.controller");
 const put_lesson_controller_1 = require("./controllers/put.lesson.controller");
 exports.coursesRouter = (0, express_1.Router)();
-exports.coursesRouter.get('/courses-list', get_all_courses_list_controller_1.getListOfCourses);
+exports.coursesRouter.get('/courses-list', get_courses_list_controller_1.getListOfCourses);
 exports.coursesRouter.get('/course', get_course_controller_1.getCourse);
 exports.coursesRouter.get('/lesson', get_lesson_controller_1.getLesson);
 exports.coursesRouter.put('/course', put_course_controller_1.addCourse);

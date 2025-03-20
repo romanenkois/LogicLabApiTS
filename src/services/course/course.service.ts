@@ -75,7 +75,9 @@ export class CourseService {
     }
   }
 
-  public static async getSimpleLesson(lessonHref: string): Promise<LessonSimple | null> {
+  public static async getSimpleLesson(
+    lessonHref: string
+  ): Promise<LessonSimple | null> {
     const collectionName = `lessons`;
     const db = await MongoDB.getDB();
 
