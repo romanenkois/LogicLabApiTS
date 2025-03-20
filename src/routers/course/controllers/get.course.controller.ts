@@ -8,9 +8,6 @@ export const getCourse = async (req: Request, res: Response) => {
     const courseHref = req.query['href'] as string;
     const getLessons: boolean = req.query['getlessons'] === 'true';
 
-    // console.log('courseHref', courseHref);
-    // console.log('getLessons', getLessons);
-
     if (!courseHref || courseHref.trim() === '') {
       res.status(400).json({ message: 'Course name is required' });
       return;
@@ -21,9 +18,6 @@ export const getCourse = async (req: Request, res: Response) => {
       course && course.lessons && getLessons
         ? await CourseService.getSimpleLessons(course.lessons.map(lesson => lesson.href))
         : null;
-
-    console.log('course', course);
-    console.log('lessons', lessons);
 
     if (course) {
       res.status(200).json({

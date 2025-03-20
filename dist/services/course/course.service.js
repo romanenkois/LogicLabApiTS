@@ -39,7 +39,6 @@ class CourseService {
                     : {};
             // Find the document
             const exists = yield db.collection(collectionName).findOne(query);
-            console.log('ex', exists);
             // Return boolean indicating existence
             return exists !== null;
         });
@@ -91,16 +90,12 @@ class CourseService {
     static getSimpleLessons(lessonHref) {
         return __awaiter(this, void 0, void 0, function* () {
             const lessons = [];
-            console.log('lessonHref', lessonHref);
             for (const href of lessonHref) {
-                console.log('href', href);
                 const lesson = yield this.getSimpleLesson(href);
-                console.log('lesson', lesson);
                 if (lesson) {
                     lessons.push(lesson);
                 }
             }
-            console.log('lessons', lessons);
             return lessons;
         });
     }
@@ -136,7 +131,6 @@ class CourseService {
             const db = yield _database_1.MongoDB.getDB();
             const lesson_ = _mappers_1.LessonMapper.mapToSchema(lesson);
             const response = yield db.collection(collectionName).insertOne(lesson_);
-            console.log('123');
             if (response.insertedId) {
                 const lesson__ = yield this.getLesson(lesson.href);
                 if (lesson__) {

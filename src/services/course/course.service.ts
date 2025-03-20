@@ -40,8 +40,6 @@ export class CourseService {
     // Find the document
     const exists = await db.collection(collectionName).findOne(query);
 
-    console.log('ex', exists);
-
     // Return boolean indicating existence
     return exists !== null;
   }
@@ -96,18 +94,14 @@ export class CourseService {
     lessonHref: string[]
   ): Promise<LessonSimple[]> {
     const lessons: LessonSimple[] = [];
-    console.log('lessonHref', lessonHref);
 
     for (const href of lessonHref) {
-      console.log('href', href);
       const lesson = await this.getSimpleLesson(href);
-      console.log('lesson', lesson);
       if (lesson) {
         lessons.push(lesson);
       }
     }
 
-    console.log('lessons', lessons);
     return lessons;
   }
 
@@ -145,7 +139,6 @@ export class CourseService {
     const lesson_: Omit<LessonSchema, '_id'> = LessonMapper.mapToSchema(lesson);
 
     const response = await db.collection(collectionName).insertOne(lesson_);
-    console.log('123');
 
     if (response.insertedId) {
       const lesson__ = await this.getLesson(lesson.href);

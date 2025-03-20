@@ -16,8 +16,6 @@ const getCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const courseHref = req.query['href'];
         const getLessons = req.query['getlessons'] === 'true';
-        // console.log('courseHref', courseHref);
-        // console.log('getLessons', getLessons);
         if (!courseHref || courseHref.trim() === '') {
             res.status(400).json({ message: 'Course name is required' });
             return;
@@ -26,8 +24,6 @@ const getCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const lessons = course && course.lessons && getLessons
             ? yield _services_1.CourseService.getSimpleLessons(course.lessons.map(lesson => lesson.href))
             : null;
-        console.log('course', course);
-        console.log('lessons', lessons);
         if (course) {
             res.status(200).json(Object.assign({ course: course }, (getLessons ? { lessons: lessons } : {})));
             return;
