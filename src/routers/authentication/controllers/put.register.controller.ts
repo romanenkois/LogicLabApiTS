@@ -1,10 +1,9 @@
-
 import { Request, Response } from 'express';
 import { errorHandler } from '@utils';
-import { AuthorizationService } from '@services';
+import { UserService } from '@services';
 import { UserRegistrationDTO } from '@dto';
 
-export const addCourse = async (req: Request, res: Response) => {
+export const registerUser = async (req: Request, res: Response) => {
   try {
     const user: UserRegistrationDTO = req.body['user']
 
@@ -13,7 +12,7 @@ export const addCourse = async (req: Request, res: Response) => {
       return;
     }
 
-    const user_ = await AuthorizationService.registerUser(user);
+    const user_ = await UserService.registerUser(user);
 
     if (user_) {
       res.status(201).json({ message: 'User has successfully registered' });

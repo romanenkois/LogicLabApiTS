@@ -14,18 +14,15 @@ const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = req.body['user'];
-        if (!user || Object.keys(user).length === 0) {
-            res.status(400).json({ message: 'User data is required' });
-            return;
-        }
-        const user_ = yield _services_1.UserService.registerUser(user);
-        if (user_) {
-            res.status(201).json({ message: 'User has successfully registered' });
+        const id = req.body['id'];
+        const email = req.body['email'];
+        const user = yield _services_1.UserService.getUser({ _id: id, email: email });
+        if (user) {
+            res.status(200).json({ user: user });
             return;
         }
         else {
-            res.status(400).json({ message: 'Failed to register' });
+            res.status(404).json({ message: 'User not found' });
             return;
         }
     }

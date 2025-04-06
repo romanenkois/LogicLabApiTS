@@ -103,11 +103,9 @@ class CourseService {
             const collectionName = 'courses';
             const db = yield _database_1.MongoDB.getDB();
             const course_ = _mappers_1.CourseMapper.typeToSchema(course);
-            const hasTheSameHref = yield this.checkForExisting('courses', {
-                href: course_.href,
-            });
+            const hasTheSameHref = yield this.getCourse(course.href);
             if (hasTheSameHref) {
-                return null;
+                throw new Error('Course with the same href already exists');
             }
             const response = yield db.collection(collectionName).insertOne(course_);
             if (response.insertedId) {
@@ -115,13 +113,8 @@ class CourseService {
                 if (course__) {
                     return course__;
                 }
-                else {
-                    throw new Error('Failed to add object');
-                }
             }
-            else {
-                throw new Error('Failed to add object');
-            }
+            throw new Error('Failed to add object');
         });
     }
     static addLesson(lesson) {
@@ -129,19 +122,18 @@ class CourseService {
             const collectionName = 'lessons';
             const db = yield _database_1.MongoDB.getDB();
             const lesson_ = _mappers_1.LessonMapper.typeToSchema(lesson);
+            const hasTheSameHref = yield this.getLesson(lesson.href);
+            if (hasTheSameHref) {
+                throw new Error('Lesson with the same href already exists');
+            }
             const response = yield db.collection(collectionName).insertOne(lesson_);
             if (response.insertedId) {
                 const lesson__ = yield this.getLesson(lesson.href);
                 if (lesson__) {
                     return lesson__;
                 }
-                else {
-                    throw new Error('Failed to add lesson');
-                }
             }
-            else {
-                throw new Error('Failed to add lesson');
-            }
+            throw new Error('Failed to add lesson');
         });
     }
 }
