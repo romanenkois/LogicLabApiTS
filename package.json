@@ -4,8 +4,10 @@
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
-    "start": "node --env-file=.env dist/index.js",
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts"
+    "start": "npm run build && node --env-file=.env dist/server.js",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
+
+    "spell": "cspell ./src/**"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +23,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "concurrently": "^9.1.2",
+    "cspell": "^8.18.1",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.13",

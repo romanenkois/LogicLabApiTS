@@ -65,7 +65,7 @@ const v2Router = (0, express_1.Router)();
 v2Router.use('/courses', _routers_1.coursesRouter);
 v2Router.use('/tests', _routers_1.testsRouter);
 app.use('/v2', v2Router);
-app.use('/', _routers_1.defaultRouter); // default router for basic non-app responces, doesnt need versioning
+app.use('/', _routers_1.defaultRouter); // default router for basic non-app responses, doesn`t need versioning
 const PORT = _config_1.appConfig.port;
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     if (_config_1.loggingConfig.console.onServerStart) {

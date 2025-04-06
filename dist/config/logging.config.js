@@ -6,10 +6,10 @@ exports.loggingConfig = {
     console: {
         onServerStart: true,
         onDataBaseConnect: true,
-        onRequset: true,
+        onRequest: true,
     },
     file: {
-        onRequset: false,
+        onRequest: false,
     },
     telegram: {
         onServerStart: app_config_1.appDeployment === 'production' ? true : false,

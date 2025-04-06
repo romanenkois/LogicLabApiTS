@@ -18,14 +18,14 @@ class CourseService {
             const courses = [];
             const collectionName = 'courses';
             const db = yield _database_1.MongoDB.getDB();
-            const responce = yield db
+            const response = yield db
                 .collection(collectionName)
                 .find()
                 .toArray();
-            if (!responce) {
+            if (!response) {
                 return [];
             }
-            for (const course of responce) {
+            for (const course of response) {
                 courses.push(course);
             }
             return courses;
@@ -49,11 +49,11 @@ class CourseService {
         return __awaiter(this, void 0, void 0, function* () {
             const collectionName = `lessons`;
             const db = yield _database_1.MongoDB.getDB();
-            const responce = yield db
+            const response = yield db
                 .collection(collectionName)
                 .findOne({ href: lessonHref });
-            if (responce) {
-                return responce;
+            if (response) {
+                return response;
             }
             else {
                 return null;
@@ -66,8 +66,8 @@ class CourseService {
             const db = yield _database_1.MongoDB.getDB();
             let course_ = course;
             course_.id = undefined;
-            const responce = yield db.collection(collectionName).insertOne(course_);
-            if (responce.insertedId) {
+            const response = yield db.collection(collectionName).insertOne(course_);
+            if (response.insertedId) {
                 const course__ = yield this.getCourse(course.href);
                 if (course__) {
                     return course__;
@@ -87,8 +87,8 @@ class CourseService {
             const db = yield _database_1.MongoDB.getDB();
             let lesson_ = lesson;
             lesson_.id = undefined;
-            const responce = yield db.collection(collectionName).insertOne(lesson);
-            if (responce.insertedId) {
+            const response = yield db.collection(collectionName).insertOne(lesson);
+            if (response.insertedId) {
                 const lesson__ = yield this.getLesson(lesson.href);
                 if (lesson__) {
                     return lesson__;

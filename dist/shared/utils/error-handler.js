@@ -13,7 +13,7 @@ const errorHandler = (res, error) => {
                 message: 'Invalid JSON format',
             });
             break;
-        // this one for failed parsing of user inputed data
+        // this one for failed parsing of user inputted data
         case 'Failed to parse user data':
             console.log(errorMessage);
             res.status(400).json({ message: errorMessage });
@@ -25,13 +25,13 @@ const errorHandler = (res, error) => {
             break;
         case 'Failed to add object':
             console.log(errorMessage);
-            res.status(500).json({ messsage: errorMessage });
+            res.status(500).json({ message: errorMessage });
             break;
         default:
             console.error('Error:', error);
             res.status(500).json({ message: `Internal error\n ${errorMessage}` });
             break;
     }
-    return; // to make sure that responce is over in all cases
+    return; // to make sure that response is over in all cases
 };
 exports.errorHandler = errorHandler;

@@ -13,7 +13,7 @@ class Logger {
      * @returns void
      */
     static logRequest(request) {
-        if (_config_1.loggingConfig.console.onRequset) {
+        if (_config_1.loggingConfig.console.onRequest) {
             console.log(`Request: ${request.method} ${request.url}`);
         }
     }

@@ -14,14 +14,14 @@ const _config_1 = require("../../config/index.js");
 const url = `https://api.telegram.org/bot${_config_1.telegramConfig.botId}/sendMessage?chat_id=${_config_1.telegramConfig.adminChatId}&text=`;
 function sendTelegramMessage(text) {
     return __awaiter(this, void 0, void 0, function* () {
-        const responce = yield fetch(url + text);
+        const response = yield fetch(url + text);
         try {
-            if (responce.status === 200) {
+            if (response.status === 200) {
                 console.log('Message sent successfully');
             }
         }
         catch (error) {
-            console.log('Message sending failed', responce);
+            console.log('Message sending failed', response);
         }
     });
 }

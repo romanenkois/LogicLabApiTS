@@ -25,7 +25,7 @@ v2Router.use('/courses', coursesRouter);
 v2Router.use('/tests', testsRouter);
 app.use('/v2', v2Router);
 
-app.use('/', defaultRouter); // default router for basic non-app responces, doesnt need versioning
+app.use('/', defaultRouter); // default router for basic non-app responses, doesn`t need versioning
 
 const PORT = appConfig.port;
 

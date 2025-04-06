@@ -3,7 +3,7 @@ export const sharedConfig = {
   apiDocumentationLink: process.env.LOGICLAB_API_DOCUMENTATION_URL || '#',
   // link to itself hosted url
   logicLab_link: process.env.LOGICLAB_URL || '#',
-  // generic responce to GET '/'
+  // generic response to GET '/'
   basic_page_response: `
     <DOCTYPE html>
     <html>
@@ -15,7 +15,7 @@ export const sharedConfig = {
     </html>`,
 }
 
-// Needed to fix issue of assigning values to basic page before config is innitialized
+// Needed to fix issue of assigning values to basic page before config is initialized
 sharedConfig.basic_page_response = sharedConfig.basic_page_response
   .replace('__API_DOC_LINK__', sharedConfig.apiDocumentationLink)
   .replace('__LOGIC_LAB_LINK__', sharedConfig.logicLab_link);

@@ -16,7 +16,7 @@ export class Logger {
     headers?: Record<string, string>;
     body?: string;
   }) {
-    if (loggingConfig.console.onRequset) {
+    if (loggingConfig.console.onRequest) {
       console.log(`Request: ${request.method} ${request.url}`);
     }
   }
