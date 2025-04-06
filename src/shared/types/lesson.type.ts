@@ -1,4 +1,5 @@
 import { LessonSchema } from "@schemas";
+import { LessonContentSchema, PlainTextBlockSchema, ListBlockSchema, CodeSampleBlockSchema } from "@schemas";
 
 export type Lesson = {
   id: LessonSchema['_id'];
@@ -10,3 +11,10 @@ export type Lesson = {
 }
 
 export interface LessonSimple extends Omit<Lesson, 'content'> {};
+
+
+export type LessonContent = LessonContentSchema;
+
+export interface PlainTextBlock extends PlainTextBlockSchema {};
+export interface ListBlock extends ListBlockSchema {};
+export interface CodeSampleBlock extends CodeSampleBlockSchema {};

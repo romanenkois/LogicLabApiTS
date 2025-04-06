@@ -1,10 +1,14 @@
 import { Response } from 'express';
 
 export const errorHandler = (res: Response, error: any) => {
-  // if it is not internal type of error, that is documented, then we just other all checks
+  // if the error is not custom made error, we just ball it
   if (error !instanceof Error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: `Internal error\n ${error}` });
     return;
   }
+
+
 
   const errorMessage = error instanceof Error ? error.message : error;
   switch (errorMessage) {
