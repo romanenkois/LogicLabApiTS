@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseMapper = void 0;
 class CourseMapper {
-    static mapFromSchema(courseSchema) {
+    static schemaToType(courseSchema) {
         return {
             id: courseSchema._id,
             href: courseSchema.href,
@@ -13,7 +13,7 @@ class CourseMapper {
             lessons: courseSchema.lessons,
         };
     }
-    static mapToSchema(course) {
+    static typeToSchema(course) {
         return {
             _id: course.id,
             href: course.href,

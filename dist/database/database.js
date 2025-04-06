@@ -19,7 +19,6 @@ class MongoDB {
             try {
                 yield this.client.connect();
                 yield this.client.db(this.dbName).command({ ping: 1 }); // ping to test connection
-                this.dbConnected = true;
                 this.$database = this.client.db(this.dbName);
                 if (_config_1.loggingConfig.console.onDataBaseConnect) {
                     console.log('MongoDB connected');
@@ -32,11 +31,12 @@ class MongoDB {
     }
     static getDB() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!this.dbConnected) {
+            if (!this.$database) {
                 yield this.connect();
                 if (this.$database) {
                     return this.$database;
                 }
+                throw new Error('MongoDB is not connected');
                 // console.error('MongoDB is not connected');
             }
             else {
@@ -56,5 +56,4 @@ MongoDB.client = new mongodb_1.MongoClient(_a.connectionUri || '', {
         deprecationErrors: true,
     },
 });
-MongoDB.dbConnected = false;
 MongoDB.$database = null;

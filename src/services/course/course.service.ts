@@ -2,6 +2,7 @@ import { MongoDB } from '@database';
 import { CourseMapper, LessonMapper } from '@mappers';
 import { CourseSchema, LessonSchema } from '@schemas';
 import { Course, Lesson, LessonSimple, SelectionOption } from '@types';
+import { ObjectId } from 'mongodb';
 
 export class CourseService {
   // TODO: add selection option
@@ -14,12 +15,10 @@ export class CourseService {
 
     const response = await db.collection(collectionName).find().toArray();
 
-    if (!response) {
-      return [];
-    }
-
-    for (const course of response) {
-      courses.push(course as Course);
+    if (response) {
+      for (const course of response) {
+        courses.push(CourseMapper.schemaToType(course as CourseSchema));
+      }
     }
 
     return courses;
@@ -30,14 +29,12 @@ export class CourseService {
     params: { id?: string; href?: string }
   ): Promise<boolean> {
     const db = await MongoDB.getDB();
-
     const query = params.id
-      ? { _id: params.id }
+      ? { _id: new ObjectId(params.id) }
       : params.href
       ? { href: params.href }
       : {};
 
-    // Find the document
     const exists = await db.collection(collectionName).findOne(query);
 
     // Return boolean indicating existence
@@ -54,7 +51,7 @@ export class CourseService {
       .findOne({ href: courseHref });
 
     if (response) {
-      course = response as Course;
+      course = CourseMapper.schemaToType(response as CourseSchema);
     }
 
     return course;
@@ -64,12 +61,12 @@ export class CourseService {
     const collectionName = `lessons`;
     const db = await MongoDB.getDB();
 
-    const response: LessonSchema = await db
+    const response = await db
       .collection(collectionName)
       .findOne({ href: lessonHref });
 
     if (response) {
-      return LessonMapper.mapFromSchema(response);
+      return LessonMapper.schemaToType(response as LessonSchema);
     } else {
       return null;
     }
@@ -81,12 +78,12 @@ export class CourseService {
     const collectionName = `lessons`;
     const db = await MongoDB.getDB();
 
-    const response: LessonSchema = await db
+    const response = await db
       .collection(collectionName)
       .findOne({ href: lessonHref });
 
     if (response) {
-      return LessonMapper.mapFromSchemaToSimple(response);
+      return LessonMapper.schemaToTypeSimple(response as LessonSchema);
     } else {
       return null;
     }
@@ -110,7 +107,7 @@ export class CourseService {
   public static async addCourse(course: Course): Promise<Course | null> {
     const collectionName = 'courses';
     const db = await MongoDB.getDB();
-    const course_: Omit<CourseSchema, '_id'> = CourseMapper.mapToSchema(
+    const course_: Omit<CourseSchema, '_id'> = CourseMapper.typeToSchema(
       course as Course
     );
 
@@ -138,7 +135,7 @@ export class CourseService {
   public static async addLesson(lesson: Lesson): Promise<Lesson | null> {
     const collectionName = 'lessons';
     const db = await MongoDB.getDB();
-    const lesson_: Omit<LessonSchema, '_id'> = LessonMapper.mapToSchema(lesson);
+    const lesson_: Omit<LessonSchema, '_id'> = LessonMapper.typeToSchema(lesson);
 
     const response = await db.collection(collectionName).insertOne(lesson_);
 

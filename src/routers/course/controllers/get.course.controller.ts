@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { errorHandler } from '@utils';
 import { CourseService } from '@services';
 import { Course, LessonSimple } from '@types';
+import { CourseMapper, LessonMapper } from '@mappers';
 
 export const getCourse = async (req: Request, res: Response) => {
   try {
@@ -16,13 +17,22 @@ export const getCourse = async (req: Request, res: Response) => {
     const course: Course | null = await CourseService.getCourse(courseHref);
     const lessons: LessonSimple[] | null =
       course && course.lessons && getLessons
-        ? await CourseService.getSimpleLessons(course.lessons.map(lesson => lesson.href))
+        ? await CourseService.getSimpleLessons(
+            course.lessons.map((lesson) => lesson.href)
+          )
         : null;
 
-    if (course) {
+    if (course && getLessons) {
       res.status(200).json({
-        course: course,
-        ...(getLessons ? { lessons: lessons } : {})
+        course: CourseMapper.typeToDTO(course),
+        lessons: lessons
+          ? lessons.map((lesson) => LessonMapper.typeSimpleToSimpleDTO(lesson))
+          : {},
+      });
+      return;
+    } else if (course) {
+      res.status(200).json({
+        course: CourseMapper.typeToDTO(course),
       });
       return;
     } else {

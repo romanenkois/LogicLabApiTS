@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CourseService = void 0;
 const _database_1 = require("../../database/index.js");
 const _mappers_1 = require("../../shared/mappers/index.js");
+const mongodb_1 = require("mongodb");
 class CourseService {
     // TODO: add selection option
     static getCoursesList(selectionOption) {
@@ -20,11 +21,10 @@ class CourseService {
             const collectionName = 'courses';
             const db = yield _database_1.MongoDB.getDB();
             const response = yield db.collection(collectionName).find().toArray();
-            if (!response) {
-                return [];
-            }
-            for (const course of response) {
-                courses.push(course);
+            if (response) {
+                for (const course of response) {
+                    courses.push(_mappers_1.CourseMapper.schemaToType(course));
+                }
             }
             return courses;
         });
@@ -33,11 +33,10 @@ class CourseService {
         return __awaiter(this, void 0, void 0, function* () {
             const db = yield _database_1.MongoDB.getDB();
             const query = params.id
-                ? { _id: params.id }
+                ? { _id: new mongodb_1.ObjectId(params.id) }
                 : params.href
                     ? { href: params.href }
                     : {};
-            // Find the document
             const exists = yield db.collection(collectionName).findOne(query);
             // Return boolean indicating existence
             return exists !== null;
@@ -52,7 +51,7 @@ class CourseService {
                 .collection(collectionName)
                 .findOne({ href: courseHref });
             if (response) {
-                course = response;
+                course = _mappers_1.CourseMapper.schemaToType(response);
             }
             return course;
         });
@@ -65,7 +64,7 @@ class CourseService {
                 .collection(collectionName)
                 .findOne({ href: lessonHref });
             if (response) {
-                return _mappers_1.LessonMapper.mapFromSchema(response);
+                return _mappers_1.LessonMapper.schemaToType(response);
             }
             else {
                 return null;
@@ -80,7 +79,7 @@ class CourseService {
                 .collection(collectionName)
                 .findOne({ href: lessonHref });
             if (response) {
-                return _mappers_1.LessonMapper.mapFromSchemaToSimple(response);
+                return _mappers_1.LessonMapper.schemaToTypeSimple(response);
             }
             else {
                 return null;
@@ -103,7 +102,7 @@ class CourseService {
         return __awaiter(this, void 0, void 0, function* () {
             const collectionName = 'courses';
             const db = yield _database_1.MongoDB.getDB();
-            const course_ = _mappers_1.CourseMapper.mapToSchema(course);
+            const course_ = _mappers_1.CourseMapper.typeToSchema(course);
             const hasTheSameHref = yield this.checkForExisting('courses', {
                 href: course_.href,
             });
@@ -129,7 +128,7 @@ class CourseService {
         return __awaiter(this, void 0, void 0, function* () {
             const collectionName = 'lessons';
             const db = yield _database_1.MongoDB.getDB();
-            const lesson_ = _mappers_1.LessonMapper.mapToSchema(lesson);
+            const lesson_ = _mappers_1.LessonMapper.typeToSchema(lesson);
             const response = yield db.collection(collectionName).insertOne(lesson_);
             if (response.insertedId) {
                 const lesson__ = yield this.getLesson(lesson.href);

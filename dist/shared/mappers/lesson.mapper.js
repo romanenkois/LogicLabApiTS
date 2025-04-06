@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LessonMapper = void 0;
 class LessonMapper {
-    static mapFromSchema(lessonSchema) {
+    static schemaToType(lessonSchema) {
         return {
             id: lessonSchema._id,
             href: lessonSchema.href,
@@ -12,7 +12,7 @@ class LessonMapper {
             content: lessonSchema.content,
         };
     }
-    static mapFromSchemaToSimple(lessonSchema) {
+    static schemaToTypeSimple(lessonSchema) {
         return {
             id: lessonSchema._id,
             href: lessonSchema.href,
@@ -21,7 +21,7 @@ class LessonMapper {
             description: lessonSchema.description,
         };
     }
-    static mapToSchema(lesson) {
+    static typeToSchema(lesson) {
         return {
             _id: lesson.id,
             href: lesson.href,

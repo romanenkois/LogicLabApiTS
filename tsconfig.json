@@ -34,12 +34,15 @@
       "@middleware": ["src/middleware/index.ts"],
       "@routers": ["src/routers/index.ts"],
       "@services": ["src/services/index.ts"],
-      
+
       "@logger": ["src/shared/logger/index.ts"],
       "@mappers": ["src/shared/mappers/index.ts"],
-      "@schemas": ["src/shared/schemas/index.ts"],
-      "@types": ["src/shared/types/index.ts"],
       "@utils": ["src/shared/utils/index.ts"],
+
+      "@dto": ["src/shared/dto/index.d.ts"],
+      "@schemas": ["src/shared/schemas/index.d.ts"],
+      "@types": ["src/shared/types/index.d.ts"],
+
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like `./node_modules/@types`. */
