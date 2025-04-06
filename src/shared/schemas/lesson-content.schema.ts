@@ -1,6 +1,6 @@
-import { ProgramingLanguage } from "@types";
+import { ProgrammingLanguage } from "@types";
 
-export type LessonContentSchema = 
+export type LessonContentSchema =
   PlainTextBlockSchema |
   ListBlockSchema |
   CodeSampleBlockSchema;
@@ -31,7 +31,7 @@ export interface CodeSampleBlockSchema extends LessonBlockSchema {
   type: 'code-sample';
   object: {
     title?: string;
-    programmingLanguage?: ProgramingLanguage;
+    programmingLanguage?: ProgrammingLanguage;
     code: string;
     codeOutput?: string;
   }

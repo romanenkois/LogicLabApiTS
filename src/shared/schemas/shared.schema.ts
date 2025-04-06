@@ -1,4 +1,4 @@
-export type ProgramingLanguageSchema =
+export type ProgrammingLanguageSchema =
   | string
   | 'html'
   | 'css'

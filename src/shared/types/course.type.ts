@@ -7,7 +7,7 @@ export type Course = {
   href: CourseSchema['href'];
   name: CourseSchema['name'];
   title: CourseSchema['title'];
-  programingLanguage: CourseSchema['programingLanguage'];
+  programmingLanguage: CourseSchema['programmingLanguage'];
   description: CourseSchema['description'];
   lessons: CourseSchema['lessons'];
 }

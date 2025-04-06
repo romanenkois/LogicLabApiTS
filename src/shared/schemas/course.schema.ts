@@ -1,4 +1,4 @@
-import { ProgramingLanguage } from '@types';
+import { ProgrammingLanguage } from '@types';
 import { LessonSimpleSchema } from '@schemas'
 import { ObjectId } from 'mongodb';
 
@@ -7,7 +7,7 @@ export interface CourseSchema {
   href: string;
   name: string;
   title: string;
-  programingLanguage: ProgramingLanguage;
+  programmingLanguage: ProgrammingLanguage;
   description: string;
   lessons: LessonSimpleSchema[]
 }

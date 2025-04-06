@@ -1,5 +1,5 @@
-import { ProgramingLanguageSchema } from "@schemas";
+import { ProgrammingLanguageSchema } from "@schemas";
 
-export type ProgramingLanguage = ProgramingLanguageSchema;
+export type ProgrammingLanguage = ProgrammingLanguageSchema;
 
 export type SelectionOption = 'all' | 'popular' | 'new';

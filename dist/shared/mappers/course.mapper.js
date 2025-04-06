@@ -8,7 +8,7 @@ class CourseMapper {
             href: courseSchema.href,
             name: courseSchema.name,
             title: courseSchema.title,
-            programingLanguage: courseSchema.programingLanguage,
+            programmingLanguage: courseSchema.programmingLanguage,
             description: courseSchema.description,
             lessons: courseSchema.lessons,
         };
@@ -19,7 +19,7 @@ class CourseMapper {
             href: course.href,
             name: course.name,
             title: course.title,
-            programingLanguage: course.programingLanguage,
+            programmingLanguage: course.programmingLanguage,
             description: course.description,
             lessons: course.lessons,
         };
