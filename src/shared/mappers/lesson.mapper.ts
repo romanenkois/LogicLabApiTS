@@ -5,7 +5,7 @@ import { Lesson, LessonSimple } from "@types";
 export class LessonMapper{
   public static schemaToType(lessonSchema: LessonSchema): Lesson {
     return {
-      id: lessonSchema._id,
+      _id: lessonSchema._id,
       href: lessonSchema.href,
       name: lessonSchema.name,
       title: lessonSchema.title,
@@ -16,7 +16,7 @@ export class LessonMapper{
 
   public static schemaToTypeSimple(lessonSchema: LessonSchema): LessonSimple {
     return {
-      id: lessonSchema._id,
+      _id: lessonSchema._id,
       href: lessonSchema.href,
       name: lessonSchema.name,
       title: lessonSchema.title,
@@ -26,7 +26,7 @@ export class LessonMapper{
 
   public static typeToSchema(lesson: Lesson): LessonSchema {
     return {
-      _id: lesson.id,
+      _id: lesson._id,
       href: lesson.href,
       name: lesson.name,
       title: lesson.title,

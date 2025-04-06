@@ -4,7 +4,7 @@ exports.LessonMapper = void 0;
 class LessonMapper {
     static schemaToType(lessonSchema) {
         return {
-            id: lessonSchema._id,
+            _id: lessonSchema._id,
             href: lessonSchema.href,
             name: lessonSchema.name,
             title: lessonSchema.title,
@@ -14,7 +14,7 @@ class LessonMapper {
     }
     static schemaToTypeSimple(lessonSchema) {
         return {
-            id: lessonSchema._id,
+            _id: lessonSchema._id,
             href: lessonSchema.href,
             name: lessonSchema.name,
             title: lessonSchema.title,
@@ -23,7 +23,7 @@ class LessonMapper {
     }
     static typeToSchema(lesson) {
         return {
-            _id: lesson.id,
+            _id: lesson._id,
             href: lesson.href,
             name: lesson.name,
             title: lesson.title,

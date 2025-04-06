@@ -5,7 +5,7 @@ import { CourseDTO } from '@dto';
 export class CourseMapper {
   public static schemaToType(courseSchema: CourseSchema): Course {
     return {
-      id: courseSchema._id,
+      _id: courseSchema._id,
       href: courseSchema.href,
       name: courseSchema.name,
       title: courseSchema.title,
@@ -17,7 +17,7 @@ export class CourseMapper {
 
   public static typeToSchema(course: Course): CourseSchema {
     return {
-      _id: course.id,
+      _id: course._id,
       href: course.href,
       name: course.name,
       title: course.title,

@@ -2,7 +2,7 @@ import { LessonSchema } from "@schemas";
 import { LessonContentSchema, PlainTextBlockSchema, ListBlockSchema, CodeSampleBlockSchema } from "@schemas";
 
 export type Lesson = {
-  id: LessonSchema['_id'];
+  _id: LessonSchema['_id'];
   href: LessonSchema['href'];
   name: LessonSchema['name'];
   title: LessonSchema['title'];
