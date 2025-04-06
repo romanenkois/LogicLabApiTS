@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.addCourse = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
+const _mappers_1 = require("../../../shared/mappers/index.js");
 const addCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const course = req.body['course'];
@@ -21,7 +22,7 @@ const addCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const course_ = yield _services_1.CourseService.addCourse(course);
         if (course_) {
-            res.status(201).json({ course: course_ });
+            res.status(201).json({ course: _mappers_1.CourseMapper.typeToDTO(course_) });
             return;
         }
         else {

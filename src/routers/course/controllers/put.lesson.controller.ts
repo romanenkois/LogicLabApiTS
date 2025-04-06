@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { errorHandler } from '@utils';
 import { CourseService } from '@services';
 import { Lesson } from '@types';
+import { LessonMapper } from '@mappers';
 
 export const addLesson = async (req: Request, res: Response) => {
   try {
@@ -15,7 +16,7 @@ export const addLesson = async (req: Request, res: Response) => {
     const lesson_ = await CourseService.addLesson(lesson);
 
     if (lesson_) {
-      res.status(201).json({ lesson: lesson_ });
+      res.status(201).json({ lesson: LessonMapper.typeToDTO(lesson_) });
       return;
     } else {
       res.status(400).json({ message: 'Failed to add lesson' });

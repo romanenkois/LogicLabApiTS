@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLesson = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
+const _mappers_1 = require("../../../shared/mappers/index.js");
 const getLesson = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const lessonhref = req.query['href'];
@@ -21,7 +22,7 @@ const getLesson = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const lesson = yield _services_1.CourseService.getLesson(lessonhref);
         if (lesson) {
-            res.status(200).json({ lesson: lesson });
+            res.status(200).json({ lesson: _mappers_1.LessonMapper.typeToDTO(lesson) });
             return;
         }
         else {

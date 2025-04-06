@@ -31,5 +31,31 @@ class LessonMapper {
             content: lesson.content,
         };
     }
+    static typeToDTO(lesson) {
+        return {
+            href: lesson.href,
+            name: lesson.name,
+            title: lesson.title,
+            description: lesson.description,
+            content: lesson.content,
+        };
+    }
+    static schemaToDTO(lesson) {
+        return {
+            href: lesson.href,
+            name: lesson.name,
+            title: lesson.title,
+            description: lesson.description,
+            content: lesson.content,
+        };
+    }
+    static typeSimpleToSimpleDTO(lesson) {
+        return {
+            href: lesson.href,
+            name: lesson.name,
+            title: lesson.title,
+            description: lesson.description,
+        };
+    }
 }
 exports.LessonMapper = LessonMapper;

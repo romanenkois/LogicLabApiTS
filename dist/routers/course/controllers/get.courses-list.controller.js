@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getListOfCourses = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
+const _mappers_1 = require("../../../shared/mappers/index.js");
 const getListOfCourses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let selectionOption = req.query['selection'];
@@ -19,7 +20,16 @@ const getListOfCourses = (req, res) => __awaiter(void 0, void 0, void 0, functio
             selectionOption = 'all';
         }
         const courses = yield _services_1.CourseService.getCoursesList(selectionOption);
-        res.status(200).json({ courses: courses });
+        if (!courses) {
+            res.status(200).json({ courses: [] });
+            return;
+        }
+        else {
+            res.status(200).json({
+                courses: courses.map((course) => _mappers_1.CourseMapper.typeToDTO(course)),
+            });
+            return;
+        }
         return;
     }
     catch (error) {
