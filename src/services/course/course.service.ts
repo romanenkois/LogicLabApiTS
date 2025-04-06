@@ -104,18 +104,16 @@ export class CourseService {
     return lessons;
   }
 
-  public static async addCourse(course: Course): Promise<Course | null> {
+  public static async addCourse(course: Course): Promise<Course> {
     const collectionName = 'courses';
     const db = await MongoDB.getDB();
     const course_: Omit<CourseSchema, '_id'> = CourseMapper.typeToSchema(
       course as Course
     );
 
-    const hasTheSameHref = await this.checkForExisting('courses', {
-      href: course_.href,
-    });
+    const hasTheSameHref = await this.getCourse(course.href);
     if (hasTheSameHref) {
-      return null;
+      throw new Error('Course with the same href already exists');
     }
 
     const response = await db.collection(collectionName).insertOne(course_);
@@ -124,18 +122,22 @@ export class CourseService {
       const course__ = await this.getCourse(course.href);
       if (course__) {
         return course__;
-      } else {
-        throw new Error('Failed to add object');
       }
-    } else {
-      throw new Error('Failed to add object');
     }
+    throw new Error('Failed to add object');
   }
 
-  public static async addLesson(lesson: Lesson): Promise<Lesson | null> {
+  public static async addLesson(lesson: Lesson): Promise<Lesson> {
     const collectionName = 'lessons';
     const db = await MongoDB.getDB();
-    const lesson_: Omit<LessonSchema, '_id'> = LessonMapper.typeToSchema(lesson);
+    const lesson_: Omit<LessonSchema, '_id'> =
+      LessonMapper.typeToSchema(lesson);
+
+    const hasTheSameHref = await this.getLesson(lesson.href);
+    if (hasTheSameHref) {
+      throw new Error('Lesson with the same href already exists');
+    }
+
 
     const response = await db.collection(collectionName).insertOne(lesson_);
 
@@ -143,11 +145,8 @@ export class CourseService {
       const lesson__ = await this.getLesson(lesson.href);
       if (lesson__) {
         return lesson__;
-      } else {
-        throw new Error('Failed to add lesson');
       }
-    } else {
-      throw new Error('Failed to add lesson');
     }
+    throw new Error('Failed to add lesson');
   }
 }
