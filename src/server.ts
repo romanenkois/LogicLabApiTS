@@ -1,11 +1,22 @@
-import express, { NextFunction, Request, Response, Router } from "express";
-import cors from "cors";
+import express, { NextFunction, Request, Response, Router } from 'express';
+import cors from 'cors';
 
 import { appConfig, loggingConfig } from '@config';
-import { coursesRouter, defaultRouter, testsRouter } from "@routers";
-import { sendTelegramMessage } from "@utils";
-import { MongoDB } from "@database";
-import { headerSizeLimiter, bodySizeLimiter, routerHandler, jsonErrorHandler } from "@middleware";
+import {
+  coursesRouter,
+  defaultRouter,
+  testsRouter,
+  authorizationRouter,
+  userRouter,
+} from '@routers';
+import { sendTelegramMessage } from '@utils';
+import { MongoDB } from '@database';
+import {
+  headerSizeLimiter,
+  bodySizeLimiter,
+  routerHandler,
+  jsonErrorHandler,
+} from '@middleware';
 
 const app = express();
 app.use(cors());
@@ -21,8 +32,12 @@ app.use(routerHandler);
 
 // main router, v2 is the most actual version of the app
 const v2Router = Router();
+
+v2Router.use('/auth', authorizationRouter);
 v2Router.use('/courses', coursesRouter);
 v2Router.use('/tests', testsRouter);
+v2Router.use('/user', userRouter);
+
 app.use('/v2', v2Router);
 
 app.use('/', defaultRouter); // default router for basic non-app responses, doesn`t need versioning
@@ -37,5 +52,5 @@ app.listen(PORT, async () => {
     sendTelegramMessage('logicLabApiTS running');
   }
 
-  await MongoDB.connect()
-})
+  await MongoDB.connect();
+});

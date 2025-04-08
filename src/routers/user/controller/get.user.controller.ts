@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { errorHandler } from '@utils';
 import { UserService } from '@services';
 
-export const registerUser = async (req: Request, res: Response) => {
+export const getUser = async (req: Request, res: Response) => {
   try {
     const id = req.body['id'];
     const email = req.body['email'];

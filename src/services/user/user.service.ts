@@ -5,7 +5,7 @@ import { User } from '@types';
 import { UserMapper } from '@mappers';
 
 export class UserService {
-  static async registerUser(user: UserRegistrationDTO): Promise<User> {
+  static async registerUser(user: UserRegistrationDTO): Promise<User | null> {
     const collectionName = 'users';
     const db = await MongoDB.getDB();
     const _user: Omit<UserSchema, '_id'> = {
@@ -28,7 +28,7 @@ export class UserService {
       .findOne({ email: _user.email });
 
     if (hasTheSameEmail) {
-      throw new Error('User with the same email already exists');
+      return null;
     }
 
     const response = await db.collection(collectionName).insertOne(_user);

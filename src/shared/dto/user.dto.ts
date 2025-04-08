@@ -1,5 +1,15 @@
 import { User } from "@types";
 
+export type UserDTO = {
+  email: User['email'];
+
+
+  userInfo: {
+    name: User['userInfo']['name'];
+    profilePicture?: User['userInfo']['profilePicture'];
+  }
+}
+
 export type UserRegistrationDTO = {
   email: User['email'];
   password: User['password'];
@@ -10,10 +20,9 @@ export type UserRegistrationDTO = {
   }
 }
 
-export type UserDTO = {
+export type UserLoginDTO = {
   email: User['email'];
-  userInfo: {
-    name: User['userInfo']['name'];
-    profilePicture?: User['userInfo']['profilePicture'];
-  }
+  password: User['password'];
 }
+
+
