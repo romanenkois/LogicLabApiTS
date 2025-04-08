@@ -9,20 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = void 0;
+exports.loginUser = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
-const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = req.body['id'];
-        const email = req.body['email'];
-        const user = yield _services_1.UserService.getUser({ _id: id, email: email });
-        if (user) {
-            res.status(200).json({ user: user });
+        const userLogin = req.body['login'];
+        if (!userLogin || Object.keys(userLogin).length === 0) {
+            res.status(400).json({ message: 'User login data is required' });
+            return;
+        }
+        const user_ = yield _services_1.AuthorizationService.logInUser(userLogin);
+        if (user_) {
+            res.status(201).json({ user: user_ });
             return;
         }
         else {
-            res.status(404).json({ message: 'User not found' });
+            // we mask if user exists or not
+            res.status(404).json({ message: 'Failed to login' });
             return;
         }
     }
@@ -30,4 +34,4 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         (0, _utils_1.errorHandler)(res, error);
     }
 });
-exports.getUser = getUser;
+exports.loginUser = loginUser;

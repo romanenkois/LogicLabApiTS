@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = exports.TestsService = exports.CourseService = void 0;
-// export { AuthorizationService } from './authorization/authorization.service';
+exports.UserService = exports.TestsService = exports.CourseService = exports.AuthorizationService = void 0;
+var authorization_service_1 = require("./authorization/authorization.service");
+Object.defineProperty(exports, "AuthorizationService", { enumerable: true, get: function () { return authorization_service_1.AuthorizationService; } });
 var course_service_1 = require("./course/course.service");
 Object.defineProperty(exports, "CourseService", { enumerable: true, get: function () { return course_service_1.CourseService; } });
 var tests_service_1 = require("./tests/tests.service");

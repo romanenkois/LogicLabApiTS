@@ -35,7 +35,7 @@ class UserService {
                 .collection(collectionName)
                 .findOne({ email: _user.email });
             if (hasTheSameEmail) {
-                throw new Error('User with the same email already exists');
+                return null;
             }
             const response = yield db.collection(collectionName).insertOne(_user);
             if (response.insertedId) {
