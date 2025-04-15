@@ -1,8 +1,10 @@
+import { envs } from './envs';
+
 export const sharedConfig = {
   // link to router documentation
-  apiDocumentationLink: process.env.LOGICLAB_API_DOCUMENTATION_URL || '#',
+  apiDocumentationLink: envs.apiDocumentationLink,
   // link to itself hosted url
-  logicLab_link: process.env.LOGICLAB_URL || '#',
+  webAppLink: envs.webAppLink,
   // generic response to GET '/'
   basic_page_response: `
     <DOCTYPE html>
@@ -13,9 +15,9 @@ export const sharedConfig = {
       <p>If you ended up here by accident, go back to <a href="__LOGIC_LAB_LINK__">logicLab</a></p>
       </body>
     </html>`,
-}
+};
 
 // Needed to fix issue of assigning values to basic page before config is initialized
 sharedConfig.basic_page_response = sharedConfig.basic_page_response
-  .replace('__API_DOC_LINK__', sharedConfig.apiDocumentationLink)
-  .replace('__LOGIC_LAB_LINK__', sharedConfig.logicLab_link);
+  .replace('__API_DOC_LINK__', sharedConfig.apiDocumentationLink || '')
+  .replace('__LOGIC_LAB_LINK__', sharedConfig.webAppLink || '');

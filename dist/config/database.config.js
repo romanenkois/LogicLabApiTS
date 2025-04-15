@@ -1,9 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.databaseConfig = void 0;
+const _config_1 = require("./index.js");
 exports.databaseConfig = {
     mongo: {
-        connectionUri: process.env.MONGODB_CONNECTION_URI,
-        dbName: process.env.MONGODB_DATABASE_NAME,
+        connectionUri: _config_1.envs.mongodbConnectionUri,
+        dbName: _config_1.envs.mongodbDbName,
+        maxConnectionAttempts: 5,
+        connectTimeout: 1000,
     },
 };

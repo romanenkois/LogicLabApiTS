@@ -8,10 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthorizationService = void 0;
 const _database_1 = require("../../database/index.js");
 const _services_1 = require("../index.js");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const _config_1 = require("../../config/index.js");
 class AuthorizationService {
     static logInUser(userCredentials) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -26,6 +31,32 @@ class AuthorizationService {
                 return null;
             }
         });
+    }
+    static generateUserToken(params) {
+        const payload = {
+            userId: params.userId,
+            role: 'user',
+        };
+        const signature = _config_1.authConfig.userSecret;
+        const options = {
+            algorithm: _config_1.authConfig.userAlgorithm,
+            expiresIn: _config_1.authConfig.userExpiration,
+            issuer: _config_1.authConfig.userIssuer,
+        };
+        return jsonwebtoken_1.default.sign(payload, signature, options);
+    }
+    static verifyUserToken(token) {
+        const signature = _config_1.authConfig.userSecret;
+        const options = {
+            algorithm: _config_1.authConfig.userAlgorithm,
+            issuer: _config_1.authConfig.userIssuer,
+        };
+        try {
+            return jsonwebtoken_1.default.verify(token, signature, options);
+        }
+        catch (error) {
+            return null;
+        }
     }
 }
 exports.AuthorizationService = AuthorizationService;

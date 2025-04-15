@@ -1,6 +1,11 @@
+import { envs } from '@config';
+
 export const databaseConfig = {
   mongo: {
-    connectionUri: process.env.MONGODB_CONNECTION_URI,
-    dbName: process.env.MONGODB_DATABASE_NAME,
+    connectionUri: envs.mongodbConnectionUri,
+    dbName: envs.mongodbDbName,
+
+    maxConnectionAttempts: 5,
+    connectTimeout: 1000,
   },
 }

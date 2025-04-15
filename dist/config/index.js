@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.telegramConfig = exports.sharedConfig = exports.loggingConfig = exports.databaseConfig = exports.appDeployment = exports.appConfig = void 0;
+exports.telegramConfig = exports.sharedConfig = exports.loggingConfig = exports.databaseConfig = exports.appDeployment = exports.appConfig = exports.authConfig = exports.envs = void 0;
+var envs_1 = require("./envs");
+Object.defineProperty(exports, "envs", { enumerable: true, get: function () { return envs_1.envs; } });
+var authentication_config_1 = require("./authentication.config");
+Object.defineProperty(exports, "authConfig", { enumerable: true, get: function () { return authentication_config_1.authConfig; } });
 var app_config_1 = require("./app.config");
 Object.defineProperty(exports, "appConfig", { enumerable: true, get: function () { return app_config_1.appConfig; } });
 Object.defineProperty(exports, "appDeployment", { enumerable: true, get: function () { return app_config_1.appDeployment; } });

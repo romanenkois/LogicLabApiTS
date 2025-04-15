@@ -1,12 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.telegramConfig = void 0;
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+const _config_1 = require("./index.js");
 exports.telegramConfig = {
-    botId: process.env.TELEGRAM_BOT_ID,
-    adminChatId: process.env.TELEGRAM_ADMIN_ID,
+    botId: _config_1.envs.telegramBotId,
+    adminChatId: _config_1.envs.telegramAdminChatId,
 };

@@ -1,7 +1,6 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import { envs } from '@config';
 
 export const telegramConfig = {
-  botId: process.env.TELEGRAM_BOT_ID,
-  adminChatId: process.env.TELEGRAM_ADMIN_ID,
-}
+  botId: envs.telegramBotId,
+  adminChatId: envs.telegramAdminChatId,
+};
