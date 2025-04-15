@@ -13,28 +13,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthorizationService = void 0;
-const _database_1 = require("../../database/index.js");
 const _services_1 = require("../index.js");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const _config_1 = require("../../config/index.js");
 class AuthorizationService {
-    static logInUser(userCredentials) {
+    static logInUser(params) {
         return __awaiter(this, void 0, void 0, function* () {
-            const collectionName = 'users';
-            const db = yield _database_1.MongoDB.getDB();
-            const user = yield _services_1.UserService.getUser({ email: userCredentials.email });
-            const token = 'token'; // TODO
-            if (user && user.password === userCredentials.password) {
-                return { user: user, token: token };
+            if ('token' in params) {
+                const userToken = this.verifyUserToken(params.token);
+                if (!userToken) {
+                    return null;
+                }
+                const user = yield _services_1.UserService.getUser({ _id: userToken.userId });
+                if (!user) {
+                    return null;
+                }
+                const newToken = this.generateUserToken({
+                    userId: user._id.toString(),
+                    email: user.email,
+                });
+                return { user: user, token: newToken };
             }
             else {
-                return null;
+                const user = yield _services_1.UserService.getUser({
+                    email: params.userCredentials.email,
+                });
+                if (user && user.password === params.userCredentials.password) {
+                    const token = this.generateUserToken({
+                        userId: user._id.toString(),
+                        email: user.email,
+                    });
+                    return { user: user, token: token };
+                }
+                else {
+                    return null;
+                }
             }
         });
     }
     static generateUserToken(params) {
         const payload = {
             userId: params.userId,
+            email: params.email,
             role: 'user',
         };
         const signature = _config_1.authConfig.userSecret;
