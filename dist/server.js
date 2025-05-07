@@ -63,6 +63,7 @@ app.use(_middleware_1.routerHandler);
 // main router, v2 is the most actual version of the app
 const v2Router = (0, express_1.Router)();
 v2Router.use('/auth', _routers_1.authorizationRouter);
+v2Router.use('/comments', _routers_1.commentsRouter);
 v2Router.use('/courses', _routers_1.coursesRouter);
 v2Router.use('/tests', _routers_1.testsRouter);
 v2Router.use('/user', _routers_1.userRouter);

@@ -8,6 +8,7 @@ const errorHandler = (res, error) => {
         res.status(500).json({ message: `Internal error\n ${error}` });
         return;
     }
+    console.error('Error:', error);
     const errorMessage = error instanceof Error ? error.message : error;
     switch (errorMessage) {
         case error instanceof SyntaxError && 'body' in error:

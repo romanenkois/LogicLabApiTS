@@ -9,30 +9,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getListOfCourses = void 0;
+exports.addComment = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
-const _mappers_1 = require("../../../shared/mappers/index.js");
-const getListOfCourses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const mongodb_1 = require("mongodb");
+const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let selectionOption = req.query['selection'];
-        if (!selectionOption || selectionOption.trim() === '') {
-            selectionOption = 'all';
-        }
-        const courses = yield _services_1.CourseService.getCoursesList(selectionOption);
-        if (!courses) {
-            res.status(200).json({ courses: [] });
+        const comment = req.body.comment;
+        if (!comment) {
+            res.status(400).json({ message: 'no comment data provided' });
             return;
         }
-        else {
-            res.status(200).json({
-                courses: courses.map((course) => _mappers_1.CourseMapper.typeToDTO(course)),
-            });
+        const comment_ = {
+            lessonHref: comment.lessonHref,
+            parentCommentId: comment.parentCommentId,
+            userId: new mongodb_1.ObjectId('681a953afcb97f01b58517c0'), // TODO: change to id from user token
+            text: comment.text,
+            attachments: comment.attachments,
+        };
+        const newComment = yield _services_1.CommentsService.createNewComment(comment_);
+        if (!newComment) {
+            res.status(500).json({ message: 'failed to create comment' });
             return;
         }
+        res.status(200).json({ comment: newComment });
+        return;
     }
     catch (error) {
         (0, _utils_1.errorHandler)(res, error);
     }
 });
-exports.getListOfCourses = getListOfCourses;
+exports.addComment = addComment;

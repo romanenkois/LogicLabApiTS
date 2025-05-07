@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRouter = exports.testsRouter = exports.defaultRouter = exports.coursesRouter = exports.authorizationRouter = void 0;
+exports.userRouter = exports.testsRouter = exports.defaultRouter = exports.coursesRouter = exports.commentsRouter = exports.authorizationRouter = void 0;
 var authentication_router_1 = require("./authentication/authentication.router");
 Object.defineProperty(exports, "authorizationRouter", { enumerable: true, get: function () { return authentication_router_1.authorizationRouter; } });
+var comments_router_1 = require("./comments/comments.router");
+Object.defineProperty(exports, "commentsRouter", { enumerable: true, get: function () { return comments_router_1.commentsRouter; } });
 var course_router_1 = require("./course/course.router");
 Object.defineProperty(exports, "coursesRouter", { enumerable: true, get: function () { return course_router_1.coursesRouter; } });
 var default_router_1 = require("./default/default.router");

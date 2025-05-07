@@ -9,30 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getListOfCourses = void 0;
+exports.getLessonComments = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
-const _mappers_1 = require("../../../shared/mappers/index.js");
-const getListOfCourses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getLessonComments = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let selectionOption = req.query['selection'];
-        if (!selectionOption || selectionOption.trim() === '') {
-            selectionOption = 'all';
-        }
-        const courses = yield _services_1.CourseService.getCoursesList(selectionOption);
-        if (!courses) {
-            res.status(200).json({ courses: [] });
+        const lessonHref = req.query['lessonhref'];
+        if (!lessonHref || lessonHref.trim() === '') {
+            res.status(400).json({ message: 'lesson href is required' });
             return;
         }
-        else {
-            res.status(200).json({
-                courses: courses.map((course) => _mappers_1.CourseMapper.typeToDTO(course)),
-            });
-            return;
-        }
+        const comments = yield _services_1.CommentsService.getCommentsOfLesson(lessonHref);
+        res.status(200).json({ comments: comments });
+        return;
     }
     catch (error) {
         (0, _utils_1.errorHandler)(res, error);
     }
 });
-exports.getListOfCourses = getListOfCourses;
+exports.getLessonComments = getLessonComments;
