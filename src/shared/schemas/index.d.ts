@@ -1,3 +1,4 @@
+export { CommentSchema } from './comment.schema';
 export { CourseSchema } from './course.schema';
 export { LessonSchema, LessonSimpleSchema } from './lesson.schema';
 export { LessonContentSchema, PlainTextBlockSchema, ListBlockSchema, CodeSampleBlockSchema } from './lesson.schema';

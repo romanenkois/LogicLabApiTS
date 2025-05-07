@@ -8,6 +8,7 @@ import {
   testsRouter,
   authorizationRouter,
   userRouter,
+  commentsRouter,
 } from '@routers';
 import { sendTelegramMessage } from '@utils';
 import { MongoDB } from '@database';
@@ -34,6 +35,7 @@ app.use(routerHandler);
 const v2Router = Router();
 
 v2Router.use('/auth', authorizationRouter);
+v2Router.use('/comments', commentsRouter);
 v2Router.use('/courses', coursesRouter);
 v2Router.use('/tests', testsRouter);
 v2Router.use('/user', userRouter);

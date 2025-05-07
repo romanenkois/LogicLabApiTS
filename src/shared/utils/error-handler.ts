@@ -8,7 +8,7 @@ export const errorHandler = (res: Response, error: any) => {
     return;
   }
 
-
+  console.error('Error:', error);
 
   const errorMessage = error instanceof Error ? error.message : error;
   switch (errorMessage) {

@@ -1,7 +1,6 @@
-import { UserDTO, UserRegistrationDTO } from '@dto';
+import { UserDTO } from '@dto';
 import { UserSchema } from '@schemas';
 import { User } from '@types';
-import { ObjectId } from 'mongodb';
 
 export class UserMapper {
   public static schemaToType(userSchema: UserSchema): User {

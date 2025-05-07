@@ -1,10 +1,8 @@
-import { MongoDB } from '@database';
 import { UserDTO, UserLoginDTO } from '@dto';
 import { UserService } from '@services';
 import { UserToken } from '@types';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { authConfig } from '@config';
-import e from 'express';
 
 export class AuthorizationService {
   public static async logInUser(

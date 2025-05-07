@@ -1,4 +1,4 @@
-import e, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { errorHandler } from '@utils';
 import { CourseService } from '@services';
 import { Course, SelectionOption } from '@types';
@@ -27,8 +27,6 @@ export const getListOfCourses = async (req: Request, res: Response) => {
       });
       return;
     }
-
-    return;
   } catch (error) {
     errorHandler(res, error);
   }
