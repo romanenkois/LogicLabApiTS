@@ -16,26 +16,16 @@ const mongodb_1 = require("mongodb");
 const _mappers_1 = require("../../../shared/mappers/index.js");
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = req.params.userid;
-        if (!id) {
+        const id = req.query['userid'];
+        if (!id || id.trim() === '') {
             res.status(400).json({ message: 'User ID is required' });
-            return;
-        }
-        const token = req.headers.authorization;
-        if (!token) {
-            res.status(401).json({ message: 'Authorization token is required' });
-            return;
-        }
-        const token_ = _services_1.AuthorizationService.verifyUserToken(token);
-        if (!token_) {
-            res.status(401).json({ message: 'Invalid token' });
             return;
         }
         const user = yield _services_1.UserService.getUser({
             _id: new mongodb_1.ObjectId(id),
         });
         if (user) {
-            res.status(200).json({ user: _mappers_1.UserMapper.schemaToPrivateDTO(user) });
+            res.status(200).json({ user: _mappers_1.UserMapper.schemaToDTO(user) });
             return;
         }
         else {

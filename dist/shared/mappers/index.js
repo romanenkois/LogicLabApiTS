@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserMapper = exports.LessonMapper = exports.CourseMapper = void 0;
+exports.UserMapper = exports.LessonMapper = exports.CourseMapper = exports.CommentMapper = void 0;
+var comment_mapper_1 = require("./comment.mapper");
+Object.defineProperty(exports, "CommentMapper", { enumerable: true, get: function () { return comment_mapper_1.CommentMapper; } });
 var course_mapper_1 = require("./course.mapper");
 Object.defineProperty(exports, "CourseMapper", { enumerable: true, get: function () { return course_mapper_1.CourseMapper; } });
 var lesson_mapper_1 = require("./lesson.mapper");

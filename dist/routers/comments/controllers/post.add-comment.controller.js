@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.addComment = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
+const _mappers_1 = require("../../../shared/mappers/index.js");
 const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const comment = req.body.comment;
@@ -41,7 +42,7 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.status(500).json({ message: 'failed to create comment' });
             return;
         }
-        res.status(200).json({ comment: newComment });
+        res.status(200).json({ comment: _mappers_1.CommentMapper.toDTO(newComment) });
         return;
     }
     catch (error) {

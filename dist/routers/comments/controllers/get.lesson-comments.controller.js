@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLessonComments = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
+const _mappers_1 = require("../../../shared/mappers/index.js");
 const getLessonComments = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const lessonHref = req.query['lessonhref'];
@@ -20,7 +21,10 @@ const getLessonComments = (req, res) => __awaiter(void 0, void 0, void 0, functi
             return;
         }
         const comments = yield _services_1.CommentsService.getCommentsOfLesson(lessonHref);
-        res.status(200).json({ comments: comments });
+        const comments_ = comments.map((comment) => {
+            return _mappers_1.CommentMapper.toDTO(comment);
+        });
+        res.status(200).json({ comments: comments_ });
         return;
     }
     catch (error) {

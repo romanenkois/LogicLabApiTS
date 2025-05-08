@@ -8,7 +8,6 @@ import { UserSchema } from '@schemas';
 export const getUser = async (req: Request, res: Response) => {
   try {
     const id = req.query['userid'] as string;
-    console.log('id', id);
     if (!id || id.trim() === '') {
       res.status(400).json({ message: 'User ID is required' });
       return;
@@ -19,7 +18,7 @@ export const getUser = async (req: Request, res: Response) => {
     });
 
     if (user) {
-      res.status(200).json({ user: UserMapper.schemaToPrivateDTO(user) });
+      res.status(200).json({ user: UserMapper.schemaToDTO(user) });
       return;
     } else {
       res.status(404).json({ message: 'User not found' });
