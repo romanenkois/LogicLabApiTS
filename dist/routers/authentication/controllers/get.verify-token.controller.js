@@ -9,35 +9,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.passwordLoginUser = void 0;
+exports.verifyToken = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
-const _mappers_1 = require("../../../shared/mappers/index.js");
-const passwordLoginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const verifyToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userLogin = req.body['login'];
-        if (!userLogin || Object.keys(userLogin).length === 0) {
-            res.status(400).json({ message: 'User login data is required' });
+        const token = req.query.token;
+        if (!token) {
+            res.status(400).json({
+                message: 'Token is required',
+            });
             return;
         }
-        const result = yield _services_1.AuthorizationService.logInUser({
-            userCredentials: userLogin,
+        const response = _services_1.AuthorizationService.verifyUserToken(token);
+        if (!response) {
+            res.status(401).json({
+                message: 'Invalid token',
+            });
+            return;
+        }
+        res.status(200).json({
+            message: 'Token is valid'
         });
-        if (result) {
-            const { user, token } = result;
-            res
-                .status(201)
-                .json({ user: _mappers_1.UserMapper.schemaToPrivateDTO(user), token: token });
-            return;
-        }
-        else {
-            // we mask if user exists or not
-            res.status(404).json({ message: 'Failed to login' });
-            return;
-        }
+        return;
     }
     catch (error) {
         (0, _utils_1.errorHandler)(res, error);
     }
 });
-exports.passwordLoginUser = passwordLoginUser;
+exports.verifyToken = verifyToken;

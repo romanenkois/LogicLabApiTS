@@ -16,6 +16,7 @@ exports.AuthorizationService = void 0;
 const _services_1 = require("../index.js");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const _config_1 = require("../../config/index.js");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 class AuthorizationService {
     static logInUser(params) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -38,16 +39,17 @@ class AuthorizationService {
                 const user = yield _services_1.UserService.getUser({
                     email: params.userCredentials.email,
                 });
-                if (user && user.password === params.userCredentials.password) {
-                    const token = this.generateUserToken({
-                        userId: user._id.toString(),
-                        email: user.email,
-                    });
-                    return { user: user, token: token };
+                if (user) {
+                    const passwordMatch = yield bcrypt_1.default.compare(params.userCredentials.password, user.password);
+                    if (passwordMatch) {
+                        const token = this.generateUserToken({
+                            userId: user._id.toString(),
+                            email: user.email,
+                        });
+                        return { user: user, token: token };
+                    }
                 }
-                else {
-                    return null;
-                }
+                return null;
             }
         });
     }

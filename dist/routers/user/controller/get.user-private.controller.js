@@ -9,30 +9,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.passwordLoginUser = void 0;
+exports.getUserPrivate = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
+const mongodb_1 = require("mongodb");
 const _mappers_1 = require("../../../shared/mappers/index.js");
-const passwordLoginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserPrivate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userLogin = req.body['login'];
-        if (!userLogin || Object.keys(userLogin).length === 0) {
-            res.status(400).json({ message: 'User login data is required' });
+        const token = req.headers.authorization;
+        if (!token) {
+            res.status(401).json({ message: 'Authorization token is required' });
             return;
         }
-        const result = yield _services_1.AuthorizationService.logInUser({
-            userCredentials: userLogin,
-        });
-        if (result) {
-            const { user, token } = result;
-            res
-                .status(201)
-                .json({ user: _mappers_1.UserMapper.schemaToPrivateDTO(user), token: token });
+        const token_ = _services_1.AuthorizationService.verifyUserToken(token);
+        if (!token_ || !token_.userId) {
+            res.status(401).json({ message: 'Invalid token' });
+            return;
+        }
+        const user = yield _services_1.UserService.getUser({ _id: new mongodb_1.ObjectId(token_ === null || token_ === void 0 ? void 0 : token_.userId) });
+        if (user) {
+            res.status(200).json({ user: _mappers_1.UserMapper.schemaToDTO(user) });
             return;
         }
         else {
-            // we mask if user exists or not
-            res.status(404).json({ message: 'Failed to login' });
+            res.status(404).json({ message: 'User not found' });
             return;
         }
     }
@@ -40,4 +40,4 @@ const passwordLoginUser = (req, res) => __awaiter(void 0, void 0, void 0, functi
         (0, _utils_1.errorHandler)(res, error);
     }
 });
-exports.passwordLoginUser = passwordLoginUser;
+exports.getUserPrivate = getUserPrivate;

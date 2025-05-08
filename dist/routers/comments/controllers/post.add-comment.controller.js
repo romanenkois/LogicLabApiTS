@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.addComment = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
-const mongodb_1 = require("mongodb");
 const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const comment = req.body.comment;
@@ -20,10 +19,20 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.status(400).json({ message: 'no comment data provided' });
             return;
         }
+        const token = req.headers['authorization'];
+        if (!token) {
+            res.status(401).json({ message: 'no token provided' });
+            return;
+        }
+        const token_ = _services_1.AuthorizationService.verifyUserToken(token);
+        if (!token_ || !token_.userId) {
+            res.status(401).json({ message: 'invalid token' });
+            return;
+        }
         const comment_ = {
             lessonHref: comment.lessonHref,
             parentCommentId: comment.parentCommentId,
-            userId: new mongodb_1.ObjectId('681a953afcb97f01b58517c0'), // TODO: change to id from user token
+            userId: token_.userId,
             text: comment.text,
             attachments: comment.attachments,
         };

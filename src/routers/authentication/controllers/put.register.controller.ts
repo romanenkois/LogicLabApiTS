@@ -19,15 +19,15 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 
     const user_ = await UserService.registerUser(userRegistration);
-    console.log('user_:', user_);
     if (!user_) {
       res.status(400).json({ message: 'Failed to register' });
       return;
     }
+
     const userLogin = await AuthorizationService.logInUser({
       userCredentials: {
         email: user_.email,
-        password: user_.password,
+        password: userRegistration.password,
       },
     })
 

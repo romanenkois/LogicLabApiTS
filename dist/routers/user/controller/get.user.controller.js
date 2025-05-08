@@ -12,13 +12,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUser = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
+const mongodb_1 = require("mongodb");
+const _mappers_1 = require("../../../shared/mappers/index.js");
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = req.body['id'];
-        const email = req.body['email'];
-        const user = yield _services_1.UserService.getUser({ _id: id, email: email });
+        const id = req.params.userid;
+        if (!id) {
+            res.status(400).json({ message: 'User ID is required' });
+            return;
+        }
+        const token = req.headers.authorization;
+        if (!token) {
+            res.status(401).json({ message: 'Authorization token is required' });
+            return;
+        }
+        const token_ = _services_1.AuthorizationService.verifyUserToken(token);
+        if (!token_) {
+            res.status(401).json({ message: 'Invalid token' });
+            return;
+        }
+        const user = yield _services_1.UserService.getUser({
+            _id: new mongodb_1.ObjectId(id),
+        });
         if (user) {
-            res.status(200).json({ user: user });
+            res.status(200).json({ user: _mappers_1.UserMapper.schemaToPrivateDTO(user) });
             return;
         }
         else {

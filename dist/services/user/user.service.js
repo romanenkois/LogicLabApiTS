@@ -8,18 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const _database_1 = require("../../database/index.js");
-const _mappers_1 = require("../../shared/mappers/index.js");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 class UserService {
     static registerUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             const collectionName = 'users';
             const db = yield _database_1.MongoDB.getDB();
+            // Hash password
+            const hashedPassword = yield bcrypt_1.default.hash(user.password, this.SALT_ROUNDS);
             const _user = {
                 email: user.email,
-                password: user.password,
+                password: hashedPassword, // Store hashed password
                 isBanned: false,
                 userInfo: {
                     name: user.userInfo.name,
@@ -61,11 +66,10 @@ class UserService {
             else {
                 return null;
             }
-            const response = yield db.collection(collectionName).findOne(query);
-            if (response) {
-                return _mappers_1.UserMapper.schemaToType(response);
-            }
-            return null;
+            const response = yield db
+                .collection(collectionName)
+                .findOne(query);
+            return response ? response : null;
         });
     }
     // idk even why this exists, but let it be
@@ -91,3 +95,4 @@ class UserService {
     }
 }
 exports.UserService = UserService;
+UserService.SALT_ROUNDS = 10;

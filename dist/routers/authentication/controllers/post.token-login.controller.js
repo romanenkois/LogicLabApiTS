@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.tokenLoginUser = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
+const _mappers_1 = require("../../../shared/mappers/index.js");
 const tokenLoginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = req.body['token'];
@@ -26,7 +27,9 @@ const tokenLoginUser = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
         if (result) {
             const { user, token } = result;
-            res.status(201).json({ user: user, token: token });
+            res
+                .status(201)
+                .json({ user: _mappers_1.UserMapper.schemaToPrivateDTO(user), token: token });
             return;
         }
         else {
