@@ -4,4 +4,4 @@ export { LessonContent, PlainTextBlock, ListBlock, CodeSampleBlock } from './les
 export { ProgrammingLanguage, SelectionOption } from './shared.type';
 export { Test } from './test.type';
 export { UserToken } from './token.type';
-export { User } from './user.type';
+// export { User } from './user.type';

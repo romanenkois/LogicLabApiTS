@@ -1,20 +1,22 @@
-import { UserDTO, UserLoginDTO } from '@dto';
+import { UserLoginDTO } from '@dto';
 import { UserService } from '@services';
 import { UserToken } from '@types';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { authConfig } from '@config';
+import bcrypt from 'bcrypt';
+import { UserSchema } from '@schemas';
 
 export class AuthorizationService {
   public static async logInUser(
     params: { userCredentials: UserLoginDTO } | { token: string }
-  ): Promise<{ user: UserDTO; token: UserToken } | null> {
+  ): Promise<{ user: UserSchema; token: UserToken } | null> {
     if ('token' in params) {
       const userToken = this.verifyUserToken(params.token);
       if (!userToken) {
         return null;
       }
 
-      const user = await UserService.getUser({ _id: userToken.userId });
+      const user: UserSchema | null = await UserService.getUser({ _id: userToken.userId });
       if (!user) {
         return null;
       }
@@ -29,15 +31,17 @@ export class AuthorizationService {
         email: params.userCredentials.email,
       });
 
-      if (user && user.password === params.userCredentials.password) {
-        const token = this.generateUserToken({
-          userId: user._id.toString(),
-          email: user.email,
-        });
-        return { user: user, token: token };
-      } else {
-        return null;
+      if (user) {
+        const passwordMatch = await bcrypt.compare(params.userCredentials.password, user.password);
+        if (passwordMatch) {
+          const token = this.generateUserToken({
+            userId: user._id.toString(),
+            email: user.email,
+          });
+          return { user: user, token: token };
+        }
       }
+      return null;
     }
   }
 

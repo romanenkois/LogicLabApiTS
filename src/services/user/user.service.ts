@@ -1,16 +1,21 @@
 import { MongoDB } from '@database';
 import { UserRegistrationDTO } from '@dto';
 import { UserSchema } from '@schemas';
-import { User } from '@types';
-import { UserMapper } from '@mappers';
+import bcrypt from 'bcrypt';
 
 export class UserService {
-  static async registerUser(user: UserRegistrationDTO): Promise<User | null> {
+  private static readonly SALT_ROUNDS = 10;
+
+  static async registerUser(user: UserRegistrationDTO): Promise<UserSchema | null> {
     const collectionName = 'users';
     const db = await MongoDB.getDB();
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(user.password, this.SALT_ROUNDS);
+
     const _user: Omit<UserSchema, '_id'> = {
       email: user.email,
-      password: user.password,
+      password: hashedPassword, // Store hashed password
       isBanned: false,
       userInfo: {
         name: user.userInfo.name,
@@ -50,7 +55,7 @@ export class UserService {
       | {
           _id: UserSchema['_id'];
         }
-  ): Promise<User | null> {
+  ): Promise<UserSchema | null> {
     const collectionName = 'users';
     const db = await MongoDB.getDB();
     const query: { email?: UserSchema['email']; _id?: UserSchema['_id'] } = {};
@@ -62,15 +67,15 @@ export class UserService {
       return null;
     }
 
-    const response = await db.collection(collectionName).findOne(query);
-    if (response) {
-      return UserMapper.schemaToType(response as UserSchema);
-    }
-    return null;
+    const response: UserSchema | null = await db
+      .collection<UserSchema>(collectionName)
+      .findOne(query);
+
+    return response ? response : null;
   }
 
   // idk even why this exists, but let it be
-  static async banUser(userId: UserSchema['_id']): Promise<User | null> {
+  static async banUser(userId: UserSchema['_id']): Promise<UserSchema | null> {
     const collectionName = 'users';
     const db = await MongoDB.getDB();
     const userExists = await this.getUser({ _id: userId });

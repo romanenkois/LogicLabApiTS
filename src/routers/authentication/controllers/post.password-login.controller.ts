@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { errorHandler } from '@utils';
 import { AuthorizationService, UserService } from '@services';
 import { UserLoginDTO } from '@dto';
+import { UserMapper } from '@mappers';
 
 export const passwordLoginUser = async (req: Request, res: Response) => {
   try {
@@ -17,7 +18,9 @@ export const passwordLoginUser = async (req: Request, res: Response) => {
 
     if (result) {
       const { user, token } = result;
-      res.status(201).json({ user: user, token: token });
+      res
+        .status(201)
+        .json({ user: UserMapper.schemaToPrivateDTO(user), token: token });
       return;
     } else {
       // we mask if user exists or not

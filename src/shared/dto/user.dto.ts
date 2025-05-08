@@ -1,28 +1,38 @@
-import { User } from "@types";
+import { UserSchema } from "@schemas";
 
 export type UserDTO = {
-  email: User['email'];
 
-
+  id: UserSchema['_id'];
   userInfo: {
-    name: User['userInfo']['name'];
-    profilePicture?: User['userInfo']['profilePicture'];
+    name: UserSchema['userInfo']['name'];
+    profilePicture?: UserSchema['userInfo']['profilePicture'];
   }
 }
 
+export type UserPrivateDTO = {
+  id: UserSchema['_id'];
+  email: UserSchema['email'];
+  userInfo: {
+    name: UserSchema['userInfo']['name'];
+    profilePicture?: UserSchema['userInfo']['profilePicture'];
+  }
+  createdAt: UserSchema['createdAt'];
+  updatedAt: UserSchema['updatedAt'];
+}
+
 export type UserRegistrationDTO = {
-  email: User['email'];
-  password: User['password'];
+  email: UserSchema['email'];
+  password: UserSchema['password'];
 
   userInfo: {
-    name: User['userInfo']['name'];
-    profilePicture?: User['userInfo']['profilePicture'];
+    name: UserSchema['userInfo']['name'];
+    profilePicture?: UserSchema['userInfo']['profilePicture'];
   }
 }
 
 export type UserLoginDTO = {
-  email: User['email'];
-  password: User['password'];
+  email: UserSchema['email'];
+  password: UserSchema['password'];
 }
 
 
