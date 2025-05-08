@@ -7,19 +7,10 @@ import { UserSchema } from '@schemas';
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const id = req.params.userid;
-    if (!id) {
+    const id = req.query['userid'] as string;
+    console.log('id', id);
+    if (!id || id.trim() === '') {
       res.status(400).json({ message: 'User ID is required' });
-      return;
-    }
-    const token = req.headers.authorization as string;
-    if (!token) {
-      res.status(401).json({ message: 'Authorization token is required' });
-      return;
-    }
-    const token_ = AuthorizationService.verifyUserToken(token);
-    if (!token_) {
-      res.status(401).json({ message: 'Invalid token' });
       return;
     }
 

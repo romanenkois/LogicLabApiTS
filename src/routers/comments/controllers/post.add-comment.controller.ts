@@ -3,6 +3,7 @@ import { errorHandler } from '@utils';
 import { AuthorizationService, CommentsService } from '@services';
 import { CommentSchema } from '@schemas';
 import { ObjectId } from 'mongodb';
+import { CommentMapper } from '@mappers';
 
 export const addComment = async (req: Request, res: Response) => {
   try {
@@ -39,7 +40,7 @@ export const addComment = async (req: Request, res: Response) => {
       return;
     }
 
-    res.status(200).json({ comment: newComment });
+    res.status(200).json({ comment: CommentMapper.toDTO(newComment) });
     return;
   } catch (error) {
     errorHandler(res, error);
