@@ -1,5 +1,4 @@
 import { ProgrammingLanguage } from '@types';
-import { LessonSimpleSchema } from '@schemas'
 import { ObjectId } from 'mongodb';
 
 export interface CourseSchema {
@@ -10,4 +9,12 @@ export interface CourseSchema {
   programmingLanguage: ProgrammingLanguage;
   description: string;
   lessons: LessonSimpleSchema[]
+}
+
+export interface LessonSimpleSchema {
+  id?: ObjectId;
+  href: string;
+  category?: string;
+  categoryName?: string;
+  position: number;
 }

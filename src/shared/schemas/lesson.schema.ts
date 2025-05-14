@@ -10,15 +10,6 @@ export interface LessonSchema {
   content: Array<LessonContentSchema>;
 }
 
-export interface LessonSimpleSchema {
-  id?: ObjectId;
-  href: string;
-  category?: string;
-  categoryName?: string;
-  position: number;
-}
-
-
 export type LessonContentSchema =
   PlainTextBlockSchema |
   ListBlockSchema |
