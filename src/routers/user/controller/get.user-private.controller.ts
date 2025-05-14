@@ -11,7 +11,7 @@ export const getUserPrivate = async (req: Request, res: Response) => {
       res.status(401).json({ message: 'Authorization token is required' });
       return;
     }
-    const token_ = AuthorizationService.verifyUserToken(token);
+    const token_ = AuthorizationService.verifyUserAccessToken(token);
     if (!token_ || !token_.userId) {
       res.status(401).json({ message: 'Invalid token' });
       return;

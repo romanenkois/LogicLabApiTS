@@ -19,7 +19,7 @@ export const addComment = async (req: Request, res: Response) => {
       res.status(401).json({ message: 'no token provided' });
       return;
     }
-    const token_ = AuthorizationService.verifyUserToken(token);
+    const token_ = AuthorizationService.verifyUserAccessToken(token);
     if (!token_ || !token_.userId) {
       res.status(401).json({ message: 'invalid token' });
       return;

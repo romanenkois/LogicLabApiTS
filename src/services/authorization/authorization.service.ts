@@ -11,7 +11,7 @@ export class AuthorizationService {
     params: { userCredentials: UserLoginDTO } | { token: string }
   ): Promise<{ user: UserSchema; token: UserToken } | null> {
     if ('token' in params) {
-      const userToken = this.verifyUserToken(params.token);
+      const userToken = this.verifyUserAccessToken(params.token);
       if (!userToken) {
         return null;
       }
@@ -20,7 +20,7 @@ export class AuthorizationService {
       if (!user) {
         return null;
       }
-      const newToken = this.generateUserToken({
+      const newToken = this.generateUserAccessToken({
         userId: user._id.toString(),
         email: user.email,
       });
@@ -34,7 +34,7 @@ export class AuthorizationService {
       if (user) {
         const passwordMatch = await bcrypt.compare(params.userCredentials.password, user.password);
         if (passwordMatch) {
-          const token = this.generateUserToken({
+          const token = this.generateUserAccessToken({
             userId: user._id.toString(),
             email: user.email,
           });
@@ -45,7 +45,7 @@ export class AuthorizationService {
     }
   }
 
-  public static generateUserToken(params: {
+  public static generateUserRefreshToken(params: {
     userId: string;
     email: string;
   }): string {
@@ -55,23 +55,58 @@ export class AuthorizationService {
       role: 'user',
     };
 
-    const signature = authConfig.userSecret as jwt.Secret;
+    const signature = authConfig.user.refresh.secret as jwt.Secret;
 
     const options: SignOptions = {
-      algorithm: authConfig.userAlgorithm as jwt.Algorithm,
-      expiresIn: authConfig.userExpiration as jwt.SignOptions['expiresIn'],
-      issuer: authConfig.userIssuer,
+      algorithm: authConfig.user.refresh.algorithm as jwt.Algorithm,
+      expiresIn: authConfig.user.refresh.expiration as jwt.SignOptions['expiresIn'],
+      issuer: authConfig.user.refresh.issuer,
     };
 
     return jwt.sign(payload, signature, options);
   }
 
-  public static verifyUserToken(token: string): jwt.JwtPayload | null {
-    const signature = authConfig.userSecret as jwt.Secret;
+  public static generateUserAccessToken(params: {
+    userId: string;
+    email: string;
+  }): string {
+    const payload: jwt.JwtPayload = {
+      userId: params.userId,
+      email: params.email,
+      role: 'user',
+    };
+
+    const signature = authConfig.user.access.secret as jwt.Secret;
 
     const options: SignOptions = {
-      algorithm: authConfig.userAlgorithm as jwt.Algorithm,
-      issuer: authConfig.userIssuer,
+      algorithm: authConfig.user.access.algorithm as jwt.Algorithm,
+      expiresIn: authConfig.user.access.expiration as jwt.SignOptions['expiresIn'],
+      issuer: authConfig.user.access.issuer,
+    };
+
+    return jwt.sign(payload, signature, options);
+  }
+
+  public static verifyUserAccessToken(token: string): jwt.JwtPayload | null {
+    const signature = authConfig.user.access.secret as jwt.Secret;
+
+    const options: SignOptions = {
+      algorithm: authConfig.user.access.algorithm as jwt.Algorithm,
+      issuer: authConfig.user.access.issuer,
+    };
+    try {
+      return jwt.verify(token, signature, options) as jwt.JwtPayload;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  public static verifyUserRefreshToken(token: string): jwt.JwtPayload | null {
+    const signature = authConfig.user.refresh.secret as jwt.Secret;
+
+    const options: SignOptions = {
+      algorithm: authConfig.user.refresh.algorithm as jwt.Algorithm,
+      issuer: authConfig.user.refresh.issuer,
     };
     try {
       return jwt.verify(token, signature, options) as jwt.JwtPayload;

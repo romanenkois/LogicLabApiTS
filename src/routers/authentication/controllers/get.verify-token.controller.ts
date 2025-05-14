@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { errorHandler } from '@utils';
 import { AuthorizationService } from '@services';
 
-export const verifyToken = async (req: Request, res: Response) => {
+export const verifyAccessToken = async (req: Request, res: Response) => {
   try {
     const token = req.query.token as string;
     if (!token) {
@@ -12,7 +12,7 @@ export const verifyToken = async (req: Request, res: Response) => {
       return;
     }
 
-    const response = AuthorizationService.verifyUserToken(token);
+    const response = AuthorizationService.verifyUserAccessToken(token);
     if (!response) {
       res.status(401).json({
         message: 'Invalid token',
