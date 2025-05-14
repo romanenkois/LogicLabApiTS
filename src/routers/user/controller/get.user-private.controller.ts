@@ -6,7 +6,8 @@ import { UserMapper } from '@mappers';
 
 export const getUserPrivate = async (req: Request, res: Response) => {
   try {
-    const token = req.headers.authorization as string;
+    let token = req.headers.authorization as string;
+    token = token.split(' ')[1];
     if (!token) {
       res.status(401).json({ message: 'Authorization token is required' });
       return;

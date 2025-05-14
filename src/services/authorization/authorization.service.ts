@@ -9,36 +9,63 @@ import { UserSchema } from '@schemas';
 export class AuthorizationService {
   public static async logInUser(
     params: { userCredentials: UserLoginDTO } | { token: string }
-  ): Promise<{ user: UserSchema; token: UserToken } | null> {
+  ): Promise<{
+    user: UserSchema;
+    accessToken: UserToken;
+    refreshToken: UserToken;
+  } | null> {
     if ('token' in params) {
       const userToken = this.verifyUserAccessToken(params.token);
       if (!userToken) {
         return null;
       }
 
-      const user: UserSchema | null = await UserService.getUser({ _id: userToken.userId });
+      const user: UserSchema | null = await UserService.getUser({
+        _id: userToken.userId,
+      });
       if (!user) {
         return null;
       }
-      const newToken = this.generateUserAccessToken({
+      const newAccessToken = this.generateUserAccessToken({
         userId: user._id.toString(),
         email: user.email,
       });
 
-      return { user: user, token: newToken };
+      const newRefreshToken = this.generateUserRefreshToken({
+        userId: user._id.toString(),
+        email: user.email,
+      });
+
+      return {
+        user: user,
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      };
     } else {
       const user = await UserService.getUser({
         email: params.userCredentials.email,
       });
 
       if (user) {
-        const passwordMatch = await bcrypt.compare(params.userCredentials.password, user.password);
+        const passwordMatch = await bcrypt.compare(
+          params.userCredentials.password,
+          user.password
+        );
         if (passwordMatch) {
-          const token = this.generateUserAccessToken({
+          const newAccessToken = this.generateUserAccessToken({
             userId: user._id.toString(),
             email: user.email,
           });
-          return { user: user, token: token };
+          const newRefreshToken = this.generateUserRefreshToken({
+            userId: user._id.toString(),
+            email: user.email,
+          });
+
+          return {
+            user: user,
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+          };
         }
       }
       return null;
@@ -59,7 +86,8 @@ export class AuthorizationService {
 
     const options: SignOptions = {
       algorithm: authConfig.user.refresh.algorithm as jwt.Algorithm,
-      expiresIn: authConfig.user.refresh.expiration as jwt.SignOptions['expiresIn'],
+      expiresIn: authConfig.user.refresh
+        .expiration as jwt.SignOptions['expiresIn'],
       issuer: authConfig.user.refresh.issuer,
     };
 
@@ -80,7 +108,8 @@ export class AuthorizationService {
 
     const options: SignOptions = {
       algorithm: authConfig.user.access.algorithm as jwt.Algorithm,
-      expiresIn: authConfig.user.access.expiration as jwt.SignOptions['expiresIn'],
+      expiresIn: authConfig.user.access
+        .expiration as jwt.SignOptions['expiresIn'],
       issuer: authConfig.user.access.issuer,
     };
 

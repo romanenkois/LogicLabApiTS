@@ -14,7 +14,8 @@ export const addComment = async (req: Request, res: Response) => {
       return;
     }
 
-    const token = req.headers['authorization'] as string;
+    let token = req.headers['authorization'] as string;
+    token = token.split(' ')[1];
     if (!token) {
       res.status(401).json({ message: 'no token provided' });
       return;

@@ -5,7 +5,9 @@ import { UserMapper } from '@mappers';
 
 export const tokenLoginUser = async (req: Request, res: Response) => {
   try {
-    const token = req.body['token'];
+    let token = req.headers.authorization as string;
+    token = token.split(' ')[1];
+
     if (!token) {
       res.status(400).json({
         message: 'Token is required',
@@ -18,10 +20,14 @@ export const tokenLoginUser = async (req: Request, res: Response) => {
     });
 
     if (result) {
-      const { user, token } = result;
+      const { user, accessToken, refreshToken } = result;
       res
         .status(201)
-        .json({ user: UserMapper.schemaToPrivateDTO(user), token: token });
+        .json({
+          user: UserMapper.schemaToPrivateDTO(user),
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        });
       return;
     } else {
       // we mask if user exists or not

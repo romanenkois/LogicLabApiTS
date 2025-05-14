@@ -17,10 +17,14 @@ export const passwordLoginUser = async (req: Request, res: Response) => {
     });
 
     if (result) {
-      const { user, token } = result;
+      const { user, accessToken, refreshToken } = result;
       res
         .status(201)
-        .json({ user: UserMapper.schemaToPrivateDTO(user), token: token });
+        .json({
+          user: UserMapper.schemaToPrivateDTO(user),
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        });
       return;
     } else {
       // we mask if user exists or not

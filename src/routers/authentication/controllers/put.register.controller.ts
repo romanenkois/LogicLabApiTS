@@ -29,12 +29,19 @@ export const registerUser = async (req: Request, res: Response) => {
         email: user_.email,
         password: userRegistration.password,
       },
-    })
+    });
 
     if (userLogin) {
-      const { user, token } = userLogin;
+      const { user, accessToken, refreshToken } = userLogin;
 
-      res.status(201).json({ message: 'User has successfully registered', user: user, token: token });
+      res
+        .status(201)
+        .json({
+          message: 'User has successfully registered',
+          user: user,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        });
       return;
     } else {
       res.status(400).json({ message: 'Failed to register' });
