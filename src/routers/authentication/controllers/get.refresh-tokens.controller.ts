@@ -15,7 +15,7 @@ export const refreshTokens = async (req: Request, res: Response) => {
     }
     const token_ = AuthorizationService.verifyUserRefreshToken(token);
     if (!token_ || !token_.userId || !token_.email) {
-      res.status(401).json({ message: 'Invalid token' });
+      res.status(403).json({ message: 'Invalid token' });
       return;
     }
     const newRefreshToken = AuthorizationService.generateUserRefreshToken({

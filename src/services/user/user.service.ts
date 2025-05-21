@@ -7,15 +7,13 @@ export class UserService {
   private static readonly SALT_ROUNDS = 10;
 
   static async registerUser(user: UserRegistrationDTO): Promise<UserSchema | null> {
-    const collectionName = 'users';
     const db = await MongoDB.getDB();
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(user.password, this.SALT_ROUNDS);
 
     const _user: Omit<UserSchema, '_id'> = {
       email: user.email,
-      password: hashedPassword, // Store hashed password
+      password: hashedPassword,
       isBanned: false,
       userInfo: {
         name: user.userInfo.name,
@@ -29,14 +27,14 @@ export class UserService {
     };
 
     const hasTheSameEmail = await db
-      .collection(collectionName)
+      .collection('users')
       .findOne({ email: _user.email });
 
     if (hasTheSameEmail) {
       return null;
     }
 
-    const response = await db.collection(collectionName).insertOne(_user);
+    const response = await db.collection('users').insertOne(_user);
 
     if (response.insertedId) {
       const user__ = await this.getUser({ email: _user.email });
@@ -56,7 +54,6 @@ export class UserService {
           _id: UserSchema['_id'];
         }
   ): Promise<UserSchema | null> {
-    const collectionName = 'users';
     const db = await MongoDB.getDB();
     const query: { email?: UserSchema['email']; _id?: UserSchema['_id'] } = {};
     if ('email' in param) {
@@ -68,11 +65,28 @@ export class UserService {
     }
 
     const response: UserSchema | null = await db
-      .collection<UserSchema>(collectionName)
+      .collection<UserSchema>('users')
       .findOne(query);
 
     return response ? response : null;
   }
+
+  static async getUsers(
+    ids: UserSchema['_id'][]
+  ): Promise<UserSchema[]> {
+    const db = await MongoDB.getDB();
+    const users: UserSchema[] = [];
+
+    for (const id of ids) {
+      const user = await this.getUser({ _id: id });
+      if (user) {
+        users.push(user);
+      }
+    }
+    return users;
+  }
+
+
 
   // idk even why this exists, but let it be
   static async banUser(userId: UserSchema['_id']): Promise<UserSchema | null> {

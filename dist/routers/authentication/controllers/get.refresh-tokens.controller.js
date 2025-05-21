@@ -9,37 +9,41 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.tokenLoginUser = void 0;
+exports.refreshTokens = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
-const _mappers_1 = require("../../../shared/mappers/index.js");
-const tokenLoginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const refreshTokens = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let token = req.headers.authorization;
-        token = token.split(' ')[1];
-        if (!token) {
+        let token = req.query['token'];
+        if (!token || token.trim() === '') {
             res.status(400).json({
                 message: 'Token is required',
             });
             return;
         }
-        const result = yield _services_1.AuthorizationService.logInUser({
-            token: token,
+        const token_ = _services_1.AuthorizationService.verifyUserRefreshToken(token);
+        if (!token_ || !token_.userId || !token_.email) {
+            res.status(403).json({ message: 'Invalid token' });
+            return;
+        }
+        const newRefreshToken = _services_1.AuthorizationService.generateUserRefreshToken({
+            userId: token_.userId,
+            email: token_.email,
         });
-        if (result) {
-            const { user, accessToken, refreshToken } = result;
-            res
-                .status(201)
-                .json({
-                user: _mappers_1.UserMapper.schemaToPrivateDTO(user),
-                accessToken: accessToken,
-                refreshToken: refreshToken,
+        const newAccessToken = _services_1.AuthorizationService.generateUserAccessToken({
+            userId: token_.userId,
+            email: token_.email,
+        });
+        if (newAccessToken && newRefreshToken) {
+            res.status(201).json({
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
             });
             return;
         }
         else {
             // we mask if user exists or not
-            res.status(404).json({ message: 'Failed to login' });
+            res.status(404).json({ message: 'Failed to refresh' });
             return;
         }
     }
@@ -47,4 +51,4 @@ const tokenLoginUser = (req, res) => __awaiter(void 0, void 0, void 0, function*
         (0, _utils_1.errorHandler)(res, error);
     }
 });
-exports.tokenLoginUser = tokenLoginUser;
+exports.refreshTokens = refreshTokens;

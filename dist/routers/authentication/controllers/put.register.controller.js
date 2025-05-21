@@ -35,8 +35,15 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             },
         });
         if (userLogin) {
-            const { user, token } = userLogin;
-            res.status(201).json({ message: 'User has successfully registered', user: user, token: token });
+            const { user, accessToken, refreshToken } = userLogin;
+            res
+                .status(201)
+                .json({
+                message: 'User has successfully registered',
+                user: user,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+            });
             return;
         }
         else {

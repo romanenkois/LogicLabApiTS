@@ -18,13 +18,11 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 class UserService {
     static registerUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const collectionName = 'users';
             const db = yield _database_1.MongoDB.getDB();
-            // Hash password
             const hashedPassword = yield bcrypt_1.default.hash(user.password, this.SALT_ROUNDS);
             const _user = {
                 email: user.email,
-                password: hashedPassword, // Store hashed password
+                password: hashedPassword,
                 isBanned: false,
                 userInfo: {
                     name: user.userInfo.name,
@@ -37,12 +35,12 @@ class UserService {
                 lastLogin: new Date(),
             };
             const hasTheSameEmail = yield db
-                .collection(collectionName)
+                .collection('users')
                 .findOne({ email: _user.email });
             if (hasTheSameEmail) {
                 return null;
             }
-            const response = yield db.collection(collectionName).insertOne(_user);
+            const response = yield db.collection('users').insertOne(_user);
             if (response.insertedId) {
                 const user__ = yield this.getUser({ email: _user.email });
                 if (user__) {
@@ -54,7 +52,6 @@ class UserService {
     }
     static getUser(param) {
         return __awaiter(this, void 0, void 0, function* () {
-            const collectionName = 'users';
             const db = yield _database_1.MongoDB.getDB();
             const query = {};
             if ('email' in param) {
@@ -67,9 +64,22 @@ class UserService {
                 return null;
             }
             const response = yield db
-                .collection(collectionName)
+                .collection('users')
                 .findOne(query);
             return response ? response : null;
+        });
+    }
+    static getUsers(ids) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const db = yield _database_1.MongoDB.getDB();
+            const users = [];
+            for (const id of ids) {
+                const user = yield this.getUser({ _id: id });
+                if (user) {
+                    users.push(user);
+                }
+            }
+            return users;
         });
     }
     // idk even why this exists, but let it be

@@ -20,12 +20,13 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.status(400).json({ message: 'no comment data provided' });
             return;
         }
-        const token = req.headers['authorization'];
+        let token = req.headers['authorization'];
+        token = token.split(' ')[1];
         if (!token) {
             res.status(401).json({ message: 'no token provided' });
             return;
         }
-        const token_ = _services_1.AuthorizationService.verifyUserToken(token);
+        const token_ = _services_1.AuthorizationService.verifyUserAccessToken(token);
         if (!token_ || !token_.userId) {
             res.status(401).json({ message: 'invalid token' });
             return;

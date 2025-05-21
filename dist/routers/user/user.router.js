@@ -4,6 +4,8 @@ exports.userRouter = void 0;
 const express_1 = require("express");
 const get_user_controller_1 = require("./controller/get.user.controller");
 const get_user_private_controller_1 = require("./controller/get.user-private.controller");
+const get_users_controller_1 = require("./controller/get.users.controller");
 exports.userRouter = (0, express_1.Router)();
 exports.userRouter.get('/user', get_user_controller_1.getUser);
+exports.userRouter.get('/users', get_users_controller_1.getUsers);
 exports.userRouter.get('/user-private', get_user_private_controller_1.getUserPrivate);

@@ -7,7 +7,7 @@ import { refreshTokens } from './controllers/get.refresh-tokens.controller';
 
 export const authorizationRouter = Router();
 
-authorizationRouter.get('/refresh', refreshTokens)
+authorizationRouter.post('/refresh', refreshTokens)
 authorizationRouter.get('/verify', verifyAccessToken)
 authorizationRouter.put('/register', registerUser);
 authorizationRouter.post('/login', passwordLoginUser);

@@ -21,19 +21,29 @@ class AuthorizationService {
     static logInUser(params) {
         return __awaiter(this, void 0, void 0, function* () {
             if ('token' in params) {
-                const userToken = this.verifyUserToken(params.token);
+                const userToken = this.verifyUserAccessToken(params.token);
                 if (!userToken) {
                     return null;
                 }
-                const user = yield _services_1.UserService.getUser({ _id: userToken.userId });
+                const user = yield _services_1.UserService.getUser({
+                    _id: userToken.userId,
+                });
                 if (!user) {
                     return null;
                 }
-                const newToken = this.generateUserToken({
+                const newAccessToken = this.generateUserAccessToken({
                     userId: user._id.toString(),
                     email: user.email,
                 });
-                return { user: user, token: newToken };
+                const newRefreshToken = this.generateUserRefreshToken({
+                    userId: user._id.toString(),
+                    email: user.email,
+                });
+                return {
+                    user: user,
+                    accessToken: newAccessToken,
+                    refreshToken: newRefreshToken,
+                };
             }
             else {
                 const user = yield _services_1.UserService.getUser({
@@ -42,36 +52,73 @@ class AuthorizationService {
                 if (user) {
                     const passwordMatch = yield bcrypt_1.default.compare(params.userCredentials.password, user.password);
                     if (passwordMatch) {
-                        const token = this.generateUserToken({
+                        const newAccessToken = this.generateUserAccessToken({
                             userId: user._id.toString(),
                             email: user.email,
                         });
-                        return { user: user, token: token };
+                        const newRefreshToken = this.generateUserRefreshToken({
+                            userId: user._id.toString(),
+                            email: user.email,
+                        });
+                        return {
+                            user: user,
+                            accessToken: newAccessToken,
+                            refreshToken: newRefreshToken,
+                        };
                     }
                 }
                 return null;
             }
         });
     }
-    static generateUserToken(params) {
+    static generateUserRefreshToken(params) {
         const payload = {
             userId: params.userId,
             email: params.email,
             role: 'user',
         };
-        const signature = _config_1.authConfig.userSecret;
+        const signature = _config_1.authConfig.user.refresh.secret;
         const options = {
-            algorithm: _config_1.authConfig.userAlgorithm,
-            expiresIn: _config_1.authConfig.userExpiration,
-            issuer: _config_1.authConfig.userIssuer,
+            algorithm: _config_1.authConfig.user.refresh.algorithm,
+            expiresIn: _config_1.authConfig.user.refresh
+                .expiration,
+            issuer: _config_1.authConfig.user.refresh.issuer,
         };
         return jsonwebtoken_1.default.sign(payload, signature, options);
     }
-    static verifyUserToken(token) {
-        const signature = _config_1.authConfig.userSecret;
+    static generateUserAccessToken(params) {
+        const payload = {
+            userId: params.userId,
+            email: params.email,
+            role: 'user',
+        };
+        const signature = _config_1.authConfig.user.access.secret;
         const options = {
-            algorithm: _config_1.authConfig.userAlgorithm,
-            issuer: _config_1.authConfig.userIssuer,
+            algorithm: _config_1.authConfig.user.access.algorithm,
+            expiresIn: _config_1.authConfig.user.access
+                .expiration,
+            issuer: _config_1.authConfig.user.access.issuer,
+        };
+        return jsonwebtoken_1.default.sign(payload, signature, options);
+    }
+    static verifyUserAccessToken(token) {
+        const signature = _config_1.authConfig.user.access.secret;
+        const options = {
+            algorithm: _config_1.authConfig.user.access.algorithm,
+            issuer: _config_1.authConfig.user.access.issuer,
+        };
+        try {
+            return jsonwebtoken_1.default.verify(token, signature, options);
+        }
+        catch (error) {
+            return null;
+        }
+    }
+    static verifyUserRefreshToken(token) {
+        const signature = _config_1.authConfig.user.refresh.secret;
+        const options = {
+            algorithm: _config_1.authConfig.user.refresh.algorithm,
+            issuer: _config_1.authConfig.user.refresh.issuer,
         };
         try {
             return jsonwebtoken_1.default.verify(token, signature, options);

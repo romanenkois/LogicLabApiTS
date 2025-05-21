@@ -9,27 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserPrivate = void 0;
+exports.getUsers = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
 const mongodb_1 = require("mongodb");
 const _mappers_1 = require("../../../shared/mappers/index.js");
-const getUserPrivate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let token = req.headers.authorization;
-        token = token.split(' ')[1];
-        if (!token) {
-            res.status(401).json({ message: 'Authorization token is required' });
+        const ids = req.query['userids'];
+        if (!ids || ids.trim() === '') {
+            res.status(400).json({ message: 'User IDs are required' });
             return;
         }
-        const token_ = _services_1.AuthorizationService.verifyUserAccessToken(token);
-        if (!token_ || !token_.userId) {
-            res.status(401).json({ message: 'Invalid token' });
-            return;
-        }
-        const user = yield _services_1.UserService.getUser({ _id: new mongodb_1.ObjectId(token_ === null || token_ === void 0 ? void 0 : token_.userId) });
-        if (user) {
-            res.status(200).json({ user: _mappers_1.UserMapper.schemaToPrivateDTO(user) });
+        const ids_ = ids
+            .split(',')
+            .map((id) => new mongodb_1.ObjectId(id.trim()));
+        const users = yield _services_1.UserService.getUsers(ids_);
+        if (users && users.length > 0) {
+            const users_ = users.map((user) => _mappers_1.UserMapper.schemaToDTO(user));
+            res.status(200).json({ users: users_ });
             return;
         }
         else {
@@ -41,4 +39,4 @@ const getUserPrivate = (req, res) => __awaiter(void 0, void 0, void 0, function*
         (0, _utils_1.errorHandler)(res, error);
     }
 });
-exports.getUserPrivate = getUserPrivate;
+exports.getUsers = getUsers;

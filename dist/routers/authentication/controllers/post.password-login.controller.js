@@ -24,10 +24,14 @@ const passwordLoginUser = (req, res) => __awaiter(void 0, void 0, void 0, functi
             userCredentials: userLogin,
         });
         if (result) {
-            const { user, token } = result;
+            const { user, accessToken, refreshToken } = result;
             res
                 .status(201)
-                .json({ user: _mappers_1.UserMapper.schemaToPrivateDTO(user), token: token });
+                .json({
+                user: _mappers_1.UserMapper.schemaToPrivateDTO(user),
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+            });
             return;
         }
         else {

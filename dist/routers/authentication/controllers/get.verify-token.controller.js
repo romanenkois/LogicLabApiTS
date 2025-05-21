@@ -9,19 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyToken = void 0;
+exports.verifyAccessToken = void 0;
 const _utils_1 = require("../../../shared/utils/index.js");
 const _services_1 = require("../../../services/index.js");
-const verifyToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const verifyAccessToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const token = req.query.token;
+        let token = req.headers.authorization;
+        token = token.split(' ')[1];
         if (!token) {
             res.status(400).json({
                 message: 'Token is required',
             });
             return;
         }
-        const response = _services_1.AuthorizationService.verifyUserToken(token);
+        const response = _services_1.AuthorizationService.verifyUserAccessToken(token);
         if (!response) {
             res.status(401).json({
                 message: 'Invalid token',
@@ -37,4 +38,4 @@ const verifyToken = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         (0, _utils_1.errorHandler)(res, error);
     }
 });
-exports.verifyToken = verifyToken;
+exports.verifyAccessToken = verifyAccessToken;

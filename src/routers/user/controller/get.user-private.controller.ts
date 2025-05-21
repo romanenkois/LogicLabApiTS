@@ -21,7 +21,7 @@ export const getUserPrivate = async (req: Request, res: Response) => {
     const user = await UserService.getUser({ _id: new ObjectId(token_?.userId) });
 
     if (user) {
-      res.status(200).json({ user: UserMapper.schemaToDTO(user) });
+      res.status(200).json({ user: UserMapper.schemaToPrivateDTO(user) });
       return;
     } else {
       res.status(404).json({ message: 'User not found' });
