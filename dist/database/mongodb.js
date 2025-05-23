@@ -18,11 +18,6 @@ class MongoDB {
         return __awaiter(this, arguments, void 0, function* (depth = 0) {
             console.log('MongoDB connecting...');
             try {
-                function tryConnect(depth) {
-                    if (depth > 3) {
-                        throw new Error('MongoDB connection failed');
-                    }
-                }
                 yield this.client.connect();
                 yield this.client.db(this.dbName).command({ ping: 1 }); // ping to test connection
                 this.$database = this.client.db(this.dbName);
@@ -36,6 +31,9 @@ class MongoDB {
                     console.log(`Retrying MongoDB connection in ${_config_1.databaseConfig.mongo.connectTimeout / 1000} seconds for ${depth + 1} time...`);
                     yield new Promise((resolve) => setTimeout(resolve, _config_1.databaseConfig.mongo.connectTimeout));
                     yield this.connect(depth + 1);
+                }
+                else {
+                    throw new Error(`MongoDB connection failed after ${depth} attempts: ${error}`);
                 }
             }
         });

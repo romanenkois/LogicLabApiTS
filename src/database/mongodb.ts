@@ -16,12 +16,6 @@ export class MongoDB {
   public static async connect(depth: number = 0): Promise<void> {
     console.log('MongoDB connecting...');
     try {
-      function tryConnect(depth: number) {
-        if (depth > 3) {
-          throw new Error('MongoDB connection failed');
-        }
-      }
-
       await this.client.connect();
       await this.client.db(this.dbName).command({ ping: 1 }); // ping to test connection
       this.$database = this.client.db(this.dbName);
@@ -41,6 +35,10 @@ export class MongoDB {
           setTimeout(resolve, databaseConfig.mongo.connectTimeout)
         );
         await this.connect(depth + 1);
+      } else {
+        throw new Error(
+          `MongoDB connection failed after ${depth} attempts: ${error}`
+        );
       }
     }
   }
